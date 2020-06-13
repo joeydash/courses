@@ -1,0 +1,12 @@
+[
+	{
+		"name" : "Learn Android Programing",
+		"icon" : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Android_Studio_icon.svg/2000px-Android_Studio_icon.svg.png",
+		"url" : "/docs_view/android"
+	},
+	{
+		"name" : "Joey Gql",
+		"icon" : "https://i.ibb.co/34BpzsB/web-hi-res-512.png",
+		"url" : "/docs_view/joeygql"
+	}
+]

@@ -1,0 +1,77 @@
+<style>
+    .navbar {
+        background-color: rgb(37, 59, 86);
+    }
+
+    .navbar-light .navbar-brand {
+        color: white;
+    }
+
+    .nav-item active {
+        color: white;
+    }
+
+    .nav-link {
+        color: white;
+    }
+
+    #logo_text:hover {
+        color: white;
+    }
+
+    .nav_icon {
+        color: white;
+        height: 100%;
+    }
+</style>
+<% include signinsignupmodal.ejs%>
+<nav class="navbar navbar-expand-lg navbar-light" id="my_navbar">
+
+    <a class="navbar-brand" href="/">
+        <img src="https://grow90.org/grow90/icon/icon_white_square.png" width="30" height="30"
+             class="d-inline-block align-top" alt="">
+        <span id="logo_text">GROW90</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <div class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       v-model="search_text" @keyup="get_course(search_text)">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit" @click="get_course(search_text)">Search
+                </button>
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#signin_modal"><i class="fa fa-sign-in" aria-hidden="true" ></i> Sign in</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  data-toggle="modal" data-target="#signup_modal"><i class="fa fa-sign-in nav_icon" aria-hidden="true" ></i> Sign up</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    let navbarApp = new Vue({
+        el: "#my_navbar",
+        data: {
+            search_text: "",
+            // links: [
+            //     {
+            //         name: "Home",
+            //         href: "/home"
+            //     }
+            // ]
+        },
+        methods: {
+            get_course: (name) => {
+                home_app.get_data(name)
+            }
+        }
+    })
+
+</script>

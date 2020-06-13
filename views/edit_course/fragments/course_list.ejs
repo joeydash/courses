@@ -1,0 +1,143 @@
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Bellota:wght@700&family=Merriweather&family=Piedra&family=Raleway:wght@300&display=swap');
+
+    .shadow {
+        box-shadow: 0 2px 5px 0;
+    }
+
+    .my-style {
+        font-family: 'Bellota', serif;
+        font-size: 1.5rem;
+    }
+
+    .card {
+        background-color: #eeeeee;
+        justify-content: center;
+        margin-top: 3.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        box-shadow: 0 4px 5px 0 #00000077, 0 6px 10px 0 #00000077;
+    }
+
+    .course-id-text, .course-name-text, .course-desc-text {
+        color: #000;
+        font-size: 1.25rem;
+        margin-bottom: 0;
+    }
+
+    .heading {
+        display: block;
+        color: #222831;
+        font-size: 39px;
+        font-family: 'Merriweather', serif;
+        line-height: 1.2;
+        text-align: center;
+        padding-bottom: 70px;
+    }
+
+    .input {
+        margin-bottom: 37px;
+        position: relative;
+        width: 100%;
+    }
+
+    .input2 {
+        border-style: none;
+        border-radius: 3px;
+        border-color: #f4f7c5;
+        color: #393e46;
+        display: block;
+        font-size: 15px;
+        font-family: 'Raleway', sans-serif;
+        line-height: 1.2;
+        text-align: center;
+        text-indent: 0.5rem;
+        width: 100%;
+    }
+
+    .spc {
+        padding-top: 7px;
+        padding-bottom: 8px;
+    }
+
+    .spc2 {
+        padding-top: 10px;
+    }
+
+</style>
+
+<section id="start" class="row">
+    <div class="card offset-lg-3 col-lg-9 offset-md-3 col-md-9 col-sm-12">
+        <div class="card-body">
+            <h5 class="card-title">
+                <span class="heading">
+                    Edit Course
+                </span>
+            </h5>
+            <span class="course-id-text">Course ID</span>
+            <div class="input">
+                <input class="input2 spc" type="text" name="ID" placeholder="Type Here" v-model="course_id">
+            </div>
+            <span class="course-name-text">Course Name</span>
+            <div class="input">
+                <input class="input2 spc" type="text" name="name" placeholder="Type Here" v-model="course_name">
+            </div>
+            <span class="course-desc-text">Course Description</span>
+            <div class="input">
+                <textarea class="input2 spc2" rows="8" name="message" placeholder="Type Here" v-model="course_desc"></textarea>
+            </div>
+            <div class="text-center">
+                <button type="button" @click="set_data" class="btn btn-dark btn-lg my-style">Submit</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+
+<script>
+
+    let edit_course = new Vue({
+        el: "#start",
+        data: {
+            course_id: "",
+            course_name: "",
+            course_desc: ""
+        },
+        methods: {
+            set_data: () => {
+                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                    method: "post",
+                    headers: {
+                        "method": "POST",
+                        "x-hasura-admin-secret": "joeydash"
+                    },
+                    body: JSON.stringify({
+                        query: `mutation MyMutation($body: String = "", $course_id: uuid = "", $title: String = "") {
+                                  insert_course_data(objects: {course_id: $course_id, title: $title, body: $body}) {
+                                    affected_rows
+                                  }
+                                }`,
+                        variables: {
+                            "course_id": edit_course.course_id,
+                            "title": edit_course.course_name,
+                            "body": edit_course.course_desc
+                        }
+                    })
+                }).then(res => res.json())
+                    .then(res => {
+                        // console.log(res);
+                        if(res.data.insert_course_data.affected_rows > 0){
+                            alert("Course Details Changed!");
+                        }
+                    // console.log(JSON.stringify(res));
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+    })
+
+</script>

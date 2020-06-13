@@ -1,0 +1,145 @@
+<style>
+
+  body {
+    background-color: #fafafa;
+  }
+
+  .card {
+    margin: 1rem;
+    margin-left: 0;
+    box-shadow: 0 4px 5px 0 #00000077, 0 6px 10px 0 #00000077;
+  }
+
+  .content {
+    padding-bottom: 5rem;
+  }
+
+  .content-body {
+    margin: 0.5rem;
+  }
+
+  .display-pic {
+    margin-left: 0.5rem;
+  }
+
+  .display-pic > img {
+    width: 45px;
+    border-radius: 50%;
+  }
+
+  .forum-content {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+  }
+
+  .footer-box {
+    background-color: #3f3f44;
+    color: #ffffff;
+  }
+
+  .footer-links {
+    float: left;
+    padding-left: 2px;
+    padding-right: 5px;
+  }
+
+  .footer-card {
+    margin-top: 0.7rem;
+  }
+
+  .heading {
+    padding-bottom: 4px;
+  }
+
+  .links {
+    background-color: wheat;
+  }
+
+  .like-btn {
+    float: right;
+  }
+
+  .dislike-btn {
+    float: right;
+  }
+
+  .tags {
+    display: inline;
+  }
+
+  .user-name {
+    font-weight: bold;
+    text-decoration: none;
+    color: #646464;
+  }
+
+</style>
+
+
+<section class="main-card">
+  <div class="forum-content">
+    <h3 class="heading">Heading: heading</h3>
+    <div class="tags" id="tags">
+      <a href="#" class="links">Tags</a>
+      <a href="#" class="links">Tags</a>
+    </div>
+    <div class="card">
+      <div class="content-body">
+        <div class="row d-inline-flex">
+          <div class="display-pic p-2">
+            <img src="https://forum.onefourthlabs.com/user_avatar/forum.onefourthlabs.com/kaustubhgupta1828/45/840_2.png"
+              alt="DP">
+          </div>
+          <div class="user-id p-2">
+            <a href="#" class="user-name">user-name</a>
+            <p>I ❤ Web Development</p>
+          </div>
+        </div>
+        <div class="content">
+          <p>sample text</p>
+          <img src="https://images.unsplash.com/photo-1591688726032-b6d90ffab006?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+           alt="sample-img" width="400px" height="auto">
+          <p>more content</p>
+          <span class="like-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px">
+              <path d="M0 0h24v24H0V0zm0 0h24v24H0V0z" fill="none" />
+              <path
+              d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm0 12l-4.34 4.34L12 14H3v-2l3-7h9v10zm4-12h4v12h-4z" />
+            </svg>
+          </span>
+          <span class="dislike-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px">
+              <path d="M0 0h24v24H0V0zm0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M9 21h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2zM9 9l4.34-4.34L12 10h9v2l-3 7H9V9zM1 9h4v12H1z" />
+              </svg>
+          </span>
+          <section class="footer-card">
+            <div class="flex-container footer-box">
+              <ul class="footer-data">
+                <li class="footer-links">link 1</li>
+                <li class="footer-links">link 2</li>
+                <li class="footer-links">link 3</li>
+                <li class="footer-links">link 4</li>
+              </ul>
+              <span>other things maybe</span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+</body>
+
+
+<script>
+
+  var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+  document.getElementsByClassName(".links").style.backgroundColor = '#' + randomColor;
+
+</script>

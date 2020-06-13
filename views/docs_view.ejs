@@ -1,0 +1,174 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Joey Dash Tutorials</title>
+   <link rel="shortcut icon" href="images/icon.png" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+  <style>
+body {
+
+    font-family: 'Slabo 27px', serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+  	.navbar-toggle {
+	    display: block;
+	}
+
+	.navbar-collapse.collapse {
+	    display: none !important;
+	}
+  </style>
+</head>
+<body>
+	<div id="app" class="container-fluid">
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" v-if="is_mobile()" class="closebtn" @click="toggleNavbar">&times;</a>
+		  	<center><p style="font-size: 20px;color: #fff; cursor:pointer;" @click="goto('/')"><b>Joey Dash Docs</b></p>
+			<br>
+			</center>
+		<div v-for="item in file_list">
+		  	<a style="font-size: 16px;cursor:pointer;" @click="openDocs(item)">{{item.substring(1,item.length - 3)}}</a>
+		</div>
+	</div>
+	<div  id="main">
+		 <nav class="navbar navbar-inverse">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+				<button v-if="is_mobile()" type="button" class="pull-left navbar-toggle" style="font-size:30px;cursor:pointer" @click="toggleNavbar">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>      
+		      <a style="color: #fff;" class="navbar-brand"> <b>{{heading}}</b></a>
+		    </div>
+		  </div>
+		</nav> 
+		<div  style="padding: 20px;"><span v-html="docs"></span></div>
+		
+	</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				course :  "<%=course%>/" ,
+				file_list: null,
+				docs: null,
+				is_navbar_opened : false,
+				heading : "Joey Dash Docs"
+			},
+			methods : {
+				openDocs : function(item){
+			  		axios.get('/read/'+this.course+item).then(function (response) {
+				    	app.heading = item.substring(1,item.length - 3);
+				    	app.docs = response.data;
+				    	if (app.is_mobile()) {
+				    		app.toggleNavbar();
+				    	}
+					}).catch(function (error) {
+				    	console.log(error);
+					});
+		  		},
+		  		toggleNavbar : function(){
+		  			if (app.is_navbar_opened) {
+		  				document.getElementById("mySidenav").style.width = "0";
+    					if (!app.is_mobile()) {
+	    					document.getElementById("main").style.marginLeft= "0";
+				   		}
+		  				app.is_navbar_opened = ! app.is_navbar_opened;
+		  			}else{
+		  				document.getElementById("mySidenav").style.width = "250px";
+    					if (!app.is_mobile()) {
+	    					document.getElementById("main").style.marginLeft = "250px";	
+				   		}
+		  				app.is_navbar_opened = ! app.is_navbar_opened;
+		  			}
+		  		},
+		  		getDocsList : function(){
+					axios.get('/read/'+this.course).then(function (response) {
+				   		app.file_list = response.data;
+				   		app.openDocs(app.file_list[0])
+				   		app.toggleNavbar();
+					}).catch(function (error) {
+				    	console.log(error);
+					});		  			
+		  		},
+		  		is_mobile :function() {
+					if( navigator.userAgent.match(/Android/i)
+						|| navigator.userAgent.match(/webOS/i)
+						|| navigator.userAgent.match(/iPhone/i)
+						|| navigator.userAgent.match(/iPad/i)
+						|| navigator.userAgent.match(/iPod/i)
+						|| navigator.userAgent.match(/BlackBerry/i)
+						|| navigator.userAgent.match(/Windows Phone/i)
+					){
+						return true;
+					}
+					else {
+						return false;
+					}
+				},
+				goto : function(src) {
+					window.location = src;
+				}
+			},
+			created: function() {
+		      	this.getDocsList();
+		   		// app.toggleNavbar();
+		    },
+		})
+			
+	</script>
+</body>
+</html> 

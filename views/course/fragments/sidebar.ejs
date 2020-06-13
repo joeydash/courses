@@ -1,0 +1,120 @@
+<style>
+    @media only screen and (max-width: 766px) {
+        #sidebar {
+            display: none;
+        }
+    }
+    .topic{
+        padding: 10px;
+    }
+    .topic:hover{
+        cursor: pointer;
+        color: white;
+        background:rgb(28, 49, 74);
+        padding: 10px;
+    }
+    .sidebar-header{
+        color: white;
+        background: rgb(28, 49, 74);
+        padding: 10px;
+    }
+    .mb-4{
+      color:#696969;
+    }
+    .chn{
+      position:relative;
+      right:70px;
+    }
+    .btn-outline-primary:hover {
+        background-color: rgb(28, 49, 74)!important;
+    }
+    .list-unstyled:hover { color: rgb(28, 49, 74); }
+</style>
+<div class="wrapper row" id="courseApp">
+    <div class="col-lg-3 col-md-5" id="sidebar">
+        <div class="sidebar-header">
+            <h3>{{course_name}}</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li v-for="item in course_data_list" @click="()=>{showcase = item.body; showcase_title = item.title}" class="topic">
+                <a class="link" style="cursor: pointer;" >
+                    {{item.title}}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-8 col-md-7" class="wrapper d-flex align-items-stretch">
+        <div id="content" class="p-4 p-md-5 pt-5 container">
+
+            <h2 class="mb-4">{{showcase_title}}</h2>
+            <div v-html="showcase">
+            </div>
+        </div>
+    </div>
+    <div class="chn col-sm-12">
+      <button type="button" class="btn btn-outline-primary float-right">Next</button>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function findGetParameter(parameterName) {
+        var result = null,
+            tmp = [];
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
+    }
+
+
+    let courseApp = new Vue({
+        el: "#courseApp",
+        data: {
+            course_name: "",
+            course_id: "",
+            course_data_list: [],
+            showcase_title: "",
+            showcase: ""
+        },
+        methods: {
+            get_data: (course_id = "") => {
+                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                    method: "post",
+                    headers: {
+                        "content-type": "application/json",
+                        "x-hasura-admin-secret": "joeydash"
+                    },
+                    body: JSON.stringify({
+                        query: `query MyQuery($course_id: uuid = "") {
+                                  courses(where: {id: {_eq: $course_id}}) {
+                                    name
+                                    course_data {
+                                      body
+                                      title
+                                      id
+                                    }
+                                  }
+                                }`,
+                        variables: {
+                            "course_id": course_id
+                        }
+                    })
+                }).then(result => result.json()).then(result => {
+                    // console.log(JSON.stringify(result));
+                    courseApp.course_name = result.data.courses[0].name;
+                    courseApp.course_data_list = result.data.courses[0].course_data;
+                }).catch(err => console.error(err));
+            },
+        },
+        mounted: function () {
+            this.$nextTick(function () {
+                courseApp.get_data(findGetParameter('course_id'));
+            })
+        }
+    });
+
+</script>

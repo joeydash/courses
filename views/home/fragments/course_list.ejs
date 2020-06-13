@@ -1,0 +1,123 @@
+<style>
+    #cds {
+        margin-top: 50px;
+    }
+
+    .card-body {
+        text-align: center;
+        padding: 0.5rem;
+        /*font-family: 'Pacifico', cursive;*/
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+    .shift{
+
+      margin-bottom: 25px;
+      padding-left: 20px;
+    }
+    .btn{
+      background-color: rgb(74, 77, 79);
+    }
+    .row{
+      padding-bottom:100px;
+    }
+</style>
+
+<div class="container">
+    <section id="cds">
+        <div class="row">
+            <div class="side col-lg-4" style="padding: 1px;cursor: pointer;" v-for="item in course_list"
+                 @click="goTo(item.id)">
+
+                <div class="card">
+                    <img class="card-img-top"
+                         :src="item.image_url"
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <h4>{{item.name}}</h4>
+                        <span class="card-title">{{item.details.substring(0, 50)}} ....</span>
+                        <!--                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+                        <!--                        card's content.</p>-->
+                        <!--                    <a href="#" class="btn btn-primary">Go somewhere</a>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <script>
+        let home_app = new Vue({
+            el: "#cds",
+            data: {
+                isGreat: true,
+                name: "Explore Our Courses",
+                repos: [],
+                course_list: []
+            },
+            // methods: {
+            //     get_data: () => {
+            //         fetch('https://api.github.com/users/'+home_app.name+'/repos')
+            //             .then(response => {
+            //                 return response.json()
+            //             })
+            //             .then(data => {
+            //                 home_app.repos = data;
+            //                 console.log(data);
+            //             })
+            //             .catch(err => {
+            //                 console.log(err);
+            //             });
+            //     },
+            //     doItInside: function () {
+
+            //     },
+            //     doItShort: () => {
+            //         home_app.name = "vahu";
+            //         home_app.isGreat = false;
+            //     }
+            // }, mounted: function () {
+            //     name: "",
+            //     repos: [],
+            //     course_list: []
+            // },
+            methods: {
+                get_data: (name = "") => {
+                    fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                        method: "post",
+                        headers: {
+                            "content-type": "application/json",
+                            "x-hasura-admin-secret": "joeydash"
+                        },
+                        body: JSON.stringify({
+                            query: `query MyQuery($name: String = "") {
+                                      courses(where: {name: {_ilike: $name}}) {
+                                        name
+                                        image_url
+                                        details
+                                        id
+                                      }
+                                    }`,
+                            variables: {
+                                "name": "%" + name + "%"
+                            }
+                        })
+                    }).then(result => result.json()).then(result => {
+                        console.log(JSON.stringify(result));
+                        home_app.course_list = result.data.courses;
+                    }).catch(err => console.error(err));
+                },
+                goTo: function (item_id) {
+                    location.href = "/course?course_id=" + item_id;
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    home_app.get_data();
+                })
+            }
+        })
+    </script>
+
+</div>

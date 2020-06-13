@@ -1,0 +1,127 @@
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Bellota:wght@700&family=Merriweather&family=Piedra&family=Raleway:wght@300&display=swap');
+
+    .my-style {
+        font-family: 'Bellota', serif;
+        font-size: 1.5rem;
+    }
+
+    .card {
+        background-color: #eeeeee;
+        justify-content: center;
+        margin-top: 3.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        box-shadow: 0 4px 5px 0 #00000077, 0 6px 10px 0 #00000077;
+    }
+
+    .course-name-text, .course-desc-text {
+        color: #000;
+        font-size: 1.25rem;
+        margin-bottom: 0;
+    }
+
+    .heading {
+        color: #222831;
+        display: block;
+        font-family: 'Merriweather', serif;
+        font-size: 39px;
+        line-height: 1.2;
+        text-align: center;
+        text-align: center;
+        padding-bottom: 70px;
+    }
+
+    .input {
+        margin-bottom: 37px;
+        position: relative;
+        width: 100%;
+    }
+
+    .input2 {
+        border-color: #f4f7c5;
+        border-style: none;
+        border-radius: 3px;
+        color: #393e46;
+        display: block;
+        font-family: 'Raleway', sans-serif;
+        font-size: 15px;
+        line-height: 1.2;
+        text-align: center;
+        text-indent: 0.5rem;
+        width: 100%;
+    }
+
+    .spc {
+        padding-top: 7px;
+        padding-bottom: 8px;
+    }
+
+    .spc2 {
+        padding-top: 10px;
+    }
+
+</style>
+
+<section id="start" class="row">
+    <div class="card offset-lg-3 col-lg-9 offset-md-3 col-md-9 col-sm-12">
+        <div class="card-body">
+            <h5 class="card-title heading">Add Course</h5>
+            <span class="course-name-text">Course Name</span>
+            <div class="input">
+                <input class="input2 spc" type="text" name="name" placeholder="Type Here" v-model="course_name">
+            </div>
+            <span class="course-desc-text">Course Description</span>
+            <div class="input">
+                <textarea class="input2 spc2" rows="8" name="message" placeholder="Type Here" v-model="course_desc"></textarea>
+            </div>
+            <div class="text-center">
+                <button type="button" @click="set_data" class="btn btn-dark btn-lg my-style">Submit</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+
+<script>
+
+    let add_course = new Vue({
+        el: "#start",
+        data: {
+            course_name: "",
+            course_desc: ""
+        },
+        methods: {
+            set_data: () => {
+                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                    method: "post",
+                    headers: {
+                        "x-hasura-admin-secret": "joeydash"
+                    },
+                    body: JSON.stringify({
+                        query: `mutation MyMutation($details: String = "", $image_url: String = "", $name: String = "") {
+                          insert_courses(objects: {name: $name, image_url: $image_url, details: $details}) {
+                            affected_rows
+                          }
+                        }`,
+                        variables: {
+                            "name": add_course.course_name,
+                            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.XeV2Zl8-hMM589WHOuVSzQHaEH%26pid%3DApi&f=1",
+                            "details": add_course.course_desc
+                        }
+                    })
+                }).then(res => res.json()).then(res => {
+                    if(res.data.insert_courses.affected_rows>0){
+                        alert("Course Saved!");
+                    }
+                    // console.log(JSON.stringify(res));
+                }).catch(err => console.error(err));
+            }
+        }
+    })
+
+</script>
