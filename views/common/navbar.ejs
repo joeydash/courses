@@ -6,20 +6,10 @@
     .navbar-light .navbar-brand {
         color: white;
     }
-
-    .nav-item active {
-        color: white;
-    }
-
-    .nav-link {
-        color: white;
-    }
-
     #logo_text:hover {
         color: white;
     }
-
-    .nav_icon {
+  .nav_icon {
         color: white;
         height: 100%;
     }
@@ -45,11 +35,16 @@
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit" @click="get_course(search_text)">Search
                 </button>
             </div>
+        </ul>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+
             <li class="nav-item">
-                <a class="nav-link" data-toggle="modal" data-target="#signin_modal"><i class="fa fa-sign-in" aria-hidden="true" ></i> Sign in</a>
+                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signin_modal"><i class="fa fa-sign-in" aria-hidden="true" ></i> Sign in</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"  data-toggle="modal" data-target="#signup_modal"><i class="fa fa-sign-in nav_icon" aria-hidden="true" ></i> Sign up</a>
+                <a style="color:white;" class="nav-link"  data-toggle="modal" data-target="#signup_modal"><i class="fa fa-sign-in nav_icon" aria-hidden="true" ></i> Sign up</a>
             </li>
         </ul>
     </div>
