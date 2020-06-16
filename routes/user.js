@@ -1,17 +1,10 @@
-var express = require('express');
-var uh = require('./user_helper')
-var router = express.Router();
+const express = require('express');
+const uh = require('./user_helper')
+const router = express.Router();
 
 
 router.get('/', (req, res, next) => {
-    uh.getGithub()
-        .then(res => {
-            console.log(res);
-            res.json(res);
-        })
-        .catch(onError => {
-            res.error(onError);
-        })
+    uh.getGithub().then(result=>res.json(result)).catch(err=>res.send(err));
 });
 
 module.exports = router;
