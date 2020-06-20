@@ -38,8 +38,12 @@ router.get('/edit_course', function(req, res, next) {
     res.render('edit_course/index');
 });
 
-router.get('/email_signup', function (req, res, next) {
+router.get('/signup', function (req, res, next) {
     res.render('email_signup/index');
+});
+
+router.get('/email_verify', function (req, res, next) {
+    res.render('email_verif/index');
 });
 
 router.get('/forum', function(req, res, next) {
