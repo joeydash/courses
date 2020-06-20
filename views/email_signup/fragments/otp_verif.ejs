@@ -1,0 +1,82 @@
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Bellota:wght@700&family=Merriweather&family=Piedra&family=Raleway:wght@300&display=swap');
+
+    .shadow {
+        box-shadow: 0 2px 5px 0;
+    }
+
+    .my-style {
+        font-family: 'Bellota', serif;
+        font-size: 1.5rem;
+    }
+
+    .card {
+        background-color: #eeeeee;
+        justify-content: center;
+        margin-top: 3.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 4px 5px 0 #00000077, 0 6px 10px 0 #00000077;
+    }
+
+    .card-body {
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .input {
+        margin-bottom: 37px;
+        position: relative;
+    }
+
+    .input2 {
+        border-style: none;
+        border-radius: 3px;
+        border-color: #f4f7c5;
+        color: #393e46;
+        display: block;
+        font-size: 15px;
+        font-family: 'Raleway', sans-serif;
+        line-height: 1.2;
+        margin : 0 auto;
+        text-align: center;
+        text-indent: 0.5rem;
+        width: 60%;
+    }
+
+    .otp-text {
+        color: #000;
+        font-size: 1.25rem;
+        font-family: 'Merriweather';
+        margin-bottom: 5rem;
+        text-align: center;
+    }
+
+    .spc {
+        padding-top: 7px;
+        padding-bottom: 8px;
+    }
+
+    .spc2 {
+        padding-top: 10px;
+    }
+
+</style>
+
+<section id="start" class="row">
+  <div class="card offset-lg-3 col-lg-9 offset-md-3 col-md-9 col-sm-12">
+        <div class="card-body">
+          <div class="input">
+                <label for="otp" class="otp-text d-flex justify-content-center">Enter OTP</label>
+                <input class="input2 spc" id="otp" type="text" name="ID" placeholder="Type Here" v-model="otp">
+            </div>
+            <div class="text-center">
+                <button type="button" @click="set_data" class="btn btn-dark btn-sm my-style">Submit</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
