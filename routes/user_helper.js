@@ -2,7 +2,10 @@ const fetch = require('node-fetch');
 var API_KEY = '98631eee81199733066c20f5c2a88e41-9a235412-8a0a2a2e';
 var DOMAIN = 'shoptohome.co.in';
 var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
+
+// RANDOM 6 DIGIT OTP GENERATOR
 let otp = Math.floor(100000 + Math.random() * 900000);
+
 
 let app = {
     sendOTPMail: () => {
@@ -11,7 +14,7 @@ let app = {
                 from: "OTP Service <otp@shoptohome.co.in>",
                 to: 'vs201400@gmail.com',
                 subject: 'No-Reply: Your OTP',
-                text: 'You OTP is ' + otp
+                text: 'Your OTP is ' + otp
             };
 
             mailgun.messages().send(data, (error, body) => {
@@ -25,7 +28,7 @@ let app = {
             });
         })
     },
-    email_signup : (email, username, otp)=>{
+    email_signup : (email, username)=>{
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql',{
                 method: "post",
@@ -45,6 +48,30 @@ let app = {
                     }
                 })
             })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data.insert_auth.affected_rows > 0) {
+                    alert("SignUp Successful!");
+                }
+            }).catch(err => console.log(err));
+        })
+    },
+    otp_verif : (user_otp)=>{
+        return new Promise((resolve, reject) => {
+            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                method: "POST",
+                headers: {
+                    "x-hasura-admin-secret": "joeydash"
+                },
+                body: JSON.stringify({
+                    query: ``,
+                    variables: {
+                       
+                    }
+                })
+            }
+            ).then(res => res.json())
+            .catch(err => console.log(err));
         })
     },
     getGithub: () => {

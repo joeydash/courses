@@ -42,7 +42,7 @@ router.get('/signup', function (req, res, next) {
     res.render('email_signup/index');
 });
 
-router.get('/email_verify', function (req, res, next) {
+router.get('/verify', function (req, res, next) {
     res.render('email_verif/index');
 });
 

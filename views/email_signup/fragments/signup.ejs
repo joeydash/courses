@@ -106,28 +106,7 @@
         },
         methods: {
             register: () => {
-                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
-                    method: "POST",
-                    headers: {
-                        "x-hasura-admin-secret": "joeydash"
-                    },
-                    body: JSON.stringify({
-                        query: `mutation MyMutation($email_otp: numeric = "", $email1: String = "", $username: String = "") {
-                                insert_auth(objects: {email: $email1, email_otp: $email_otp, username: $username}) {
-                                    affected_rows }}`,
-                        variables: {
-                            "email1": signup.email,
-                            "username": signup.name,
-                            "email_otp": user_helper.otp
-                        }
-                    })
-                }
-                ).then(res => res.JSON())
-                  .then(res => {
-                      if(res.data.insert_auth.affected_rows > 0){
-                            alert("SignUp Successful!");
-                        }
-                  }).catch(err => console.log(err));
+                
             }
         }
     })

@@ -69,7 +69,7 @@
         <div class="card-body">
           <div class="input">
                 <label for="otp" class="otp-text d-flex justify-content-center">Enter OTP</label>
-                <input class="input2 spc" id="otp" type="text" name="ID" placeholder="Type Here" v-model="otp">
+                <input class="input2 spc" id="otp" type="number" name="ID" placeholder="Type Here" v-model="otp">
             </div>
             <div class="text-center">
                 <button type="button" @click="verify" class="btn btn-dark btn-sm my-style">Submit</button>
@@ -90,19 +90,7 @@
         },
         methods: {
             verify: () => {
-                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
-                    method: "POST",
-                    headers: {
-                        "x-hasura-admin-secret": "joeydash"
-                    },
-                    body: JSON.stringify({
-                        query: ``,
-                        variables: {
-                            
-                        }
-                    })
-                }
-                )
+               
             }
         }
     })
