@@ -4,7 +4,6 @@ var DOMAIN = 'shoptohome.co.in';
 var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 let otp = Math.floor(100000 + Math.random() * 900000);
 
-
 let app = {
     sendOTPMail: () => {
         return new Promise((resolve, reject) => {
@@ -24,6 +23,28 @@ let app = {
                     resolve(body);
                 }
             });
+        })
+    },
+    email_signup : (email, username, otp)=>{
+        return new Promise((resolve, reject) => {
+            fetch('https://lmsdb.herokuapp.com/v1/graphql',{
+                method: "post",
+                header: {
+                    'x-hasura-admin-secret': 'joeydash'
+                },
+                body: JSON.stringify({
+                    query : `mutation MyMutation($email_otp: numeric = "", $email: String = "", $username: String = "") {
+                              insert_auth(objects: {email: $email, email_otp: $email_otp, username: $username}, on_conflict: {constraint: auth_email_carrier_key, update_columns: email_otp}) {
+                                affected_rows
+                              }
+                            }`,
+                    variables: {
+                        "email_otp": otp,
+                        "email": email,
+                        "username": username
+                    }
+                })
+            })
         })
     },
     getGithub: () => {
