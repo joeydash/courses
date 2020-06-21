@@ -64,7 +64,7 @@
 
 </style>
 
-<section id="start" class="row">
+<section id="root" class="row">
   <div class="card offset-lg-3 col-lg-9 offset-md-3 col-md-9 col-sm-12">
         <div class="card-body">
           <div class="input">
@@ -72,7 +72,7 @@
                 <input class="input2 spc" id="otp" type="text" name="ID" placeholder="Type Here" v-model="otp">
             </div>
             <div class="text-center">
-                <button type="button" @click="set_data" class="btn btn-dark btn-sm my-style">Submit</button>
+                <button type="button" @click="verify" class="btn btn-dark btn-sm my-style">Submit</button>
             </div>
         </div>
     </div>
@@ -80,3 +80,31 @@
 </section>
 
 </body>
+
+<script>
+
+    let otp = new Vue ({
+        el: "#root",
+        data: {
+            otp: ""
+        },
+        methods: {
+            verify: () => {
+                fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                    method: "POST",
+                    headers: {
+                        "x-hasura-admin-secret": "joeydash"
+                    },
+                    body: JSON.stringify({
+                        query: ``,
+                        variables: {
+                            
+                        }
+                    })
+                }
+                )
+            }
+        }
+    })
+
+</script>
