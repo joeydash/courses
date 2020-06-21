@@ -79,10 +79,10 @@
                 <input class="input2 spc" id="name" type="text" name="name" placeholder="Username" v-model="name">
               </div>
               <div class="email-input root-inp">
-                <input class="input2 spc" id="email" type="text" name="name" placeholder="Email" v-model="email">
+                <input class="input2 spc" id="email" type="text" name="email" placeholder="Email" v-model="email">
               </div>
               <div class="pass-input root-inp">
-                <input type="text" class="input2 spc" id="pass" name="password" placeholder="Password" v-model="password">
+                <input type="password" class="input2 spc" id="pass" name="password" placeholder="Password" v-model="password">
               </div>
             </div>
             <div class="text-center">
@@ -98,7 +98,7 @@
 <script>
 
     let signup = new Vue ({
-        el: "root",
+        el: "#root",
         data: {
             name: "",
             email: "",
@@ -118,11 +118,16 @@
                         variables: {
                             "email1": signup.email,
                             "username": signup.name,
-                            "email_otp": 123456
+                            "email_otp": user_helper.otp
                         }
                     })
                 }
-                )
+                ).then(res => res.JSON())
+                  .then(res => {
+                      if(res.data.insert_auth.affected_rows > 0){
+                            alert("SignUp Successful!");
+                        }
+                  }).catch(err => console.log(err));
             }
         }
     })
