@@ -38,6 +38,13 @@ router.get('/edit_course', function(req, res, next) {
     res.render('edit_course/index');
 });
 
+router.get('/signin', function(req, res, next) {
+    res.render('new_user/index');
+});
+
+router.get('/sms_otp', function(req, res, next) {
+    res.render('user_verify/index');
+});
 router.get('/forum', function(req, res, next) {
     res.render('forum/index');
 })
