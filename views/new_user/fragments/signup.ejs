@@ -75,10 +75,13 @@
         <div class="card-body">
             <h1 class="d-flex justify-content-center">Sign up</h1>
             <div class="input">
-                <div class="name-input root-inp">
+                <div class="name-input root-inp" v-if="type_otp">
+                    <input class="input2 spc" id="name" type="text" name="name" placeholder="OTP" v-model="otp">
+                </div>
+                <div class="name-input root-inp" v-if="!type_otp">
                     <input class="input2 spc" id="name" type="text" name="name" placeholder="Full Name" v-model="name">
                 </div>
-                <div class="email-input root-inp">
+                <div class="email-input root-inp" v-if="!type_otp">
                     <input class="input2 spc" id="phone" type="tel" name="phone" placeholder="Phone Number"
                            v-model="phone">
                 </div>
@@ -98,8 +101,10 @@
     let signup = new Vue({
         el: "#root",
         data: {
+            type_otp: false,
             name: "Mritunjoy Das",
-            phone: "9148816419"
+            phone: "9148816419",
+            otp: ""
 
         },
         methods: {
@@ -114,9 +119,11 @@
                         phone: signup.phone
                     })
                 })
-                    .then(res => res.text())
+                    .then(res => res.json())
                     .then(res => {
-                        console.log(res)
+                        if(res.type==="success"){
+                            signup.type_otp = true;
+                        }
                     })
                     .catch(err => console.error(err));
             }
