@@ -8,13 +8,13 @@ let otp = Math.floor(100000 + Math.random() * 900000);
 
 
 let app = {
-    sendOTPMail: () => {
+    sendOTPMail: (email) => {
         return new Promise((resolve, reject) => {
             const data = {
                 from: "OTP Service <otp@shoptohome.co.in>",
-                to: 'vs201400@gmail.com',
+                to: email,
                 subject: 'No-Reply: Your OTP',
-                text: 'Your OTP is ' + otp
+                text: 'Your OTP is ' + user_helper.otp
             };
 
             mailgun.messages().send(data, (error, body) => {
@@ -42,36 +42,15 @@ let app = {
                               }
                             }`,
                     variables: {
-                        "email_otp": otp,
+                        "email_otp": user_helper.otp,
                         "email": email,
                         "username": username
                     }
                 })
             })
             .then(res => res.json())
-            .then(res => {
-                if (res.data.insert_auth.affected_rows > 0) {
-                    alert("SignUp Successful!");
-                }
-            }).catch(err => console.log(err));
-        })
-    },
-    otp_verif : (user_otp)=>{
-        return new Promise((resolve, reject) => {
-            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
-                method: "POST",
-                headers: {
-                    "x-hasura-admin-secret": "joeydash"
-                },
-                body: JSON.stringify({
-                    query: ``,
-                    variables: {
-                       
-                    }
-                })
-            }
-            ).then(res => res.json())
-            .catch(err => console.log(err));
+            .then(res => resolve(res))
+            .catch(err => reject(err));
         })
     },
     getGithub: () => {

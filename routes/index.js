@@ -42,10 +42,6 @@ router.get('/signup', function (req, res, next) {
     res.render('email_signup/index');
 });
 
-router.get('/verify', function (req, res, next) {
-    res.render('email_verif/index');
-});
-
 router.get('/forum', function(req, res, next) {
     res.render('forum/index');
 })
