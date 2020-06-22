@@ -15,12 +15,12 @@ let app = {
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {
                 method: "post",
-                header: {
-                    'x-hasura-admin-secret': 'joeydash'
+                headers: {
+                    'x-hasura-access-key': "joeydash"
                 },
                 body: JSON.stringify({
                     query: `mutation MyMutation($phone: String = "", $fullname: String = "") {
-                              insert_auth(objects: {phone: $phone, fullname: $fullname}, on_conflict: {constraint: auth_email_carrier_key, update_columns: career_user_id}) {
+                              insert_auth(objects: {phone: $phone, fullname: $fullname}) {
                                 affected_rows
                               }
                             }`,
@@ -30,15 +30,7 @@ let app = {
                     }
                 })
             }).then(res => res.json())
-                .then(res => {
-                    console.log(JSON.stringify(res))
-                    if (res.data.insert_auth.affected_rows > 0) {
-                        resolve(res)
-                    }
-                }).catch(err => {
-                console.log(err);
-                reject(err);
-            })
+                .then(res => resolve(res)).catch(err => reject(err))
         })
     }
 }
