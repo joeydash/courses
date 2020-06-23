@@ -47,6 +47,29 @@ let app = {
                 .catch(err => reject(err));
         })
     },
+    mailVerify: (email, otp) => {
+        return new Promise((resolve, reject) => {
+            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                method: "post",
+                headers: {
+                    'x-hasura-admin-secret': 'joeydash'
+                },
+                body: JSON.stringify({
+                    query: `mutation MyMutation($email: String = "", $email_otp: numeric = "") {
+                            update_auth(where: {email_otp: {_eq: $email_otp}, email: {_eq: $email}}, _set: {email_verified: true}) {
+                                affected_rows}
+                            }`,
+                    variables: {
+                        "email_otp": otp,
+                        "email": email
+                    }
+                })
+            })
+                .then(res => res.json())
+                .then(res => resolve(res))
+                .catch(err => reject(err));
+        })
+    },
     getGithub: () => {
         return new Promise((resolve, reject) => {
             fetch('https://api.github.com/users/joeydash').then(res => res.json()).then(res => resolve(res)).catch(onError => reject(onError));

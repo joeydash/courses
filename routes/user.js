@@ -17,6 +17,12 @@ router.post('/email_signup', (req, res, next) => {
         .then(result => res.json(result))
         .catch(err => res.send(err));
     })
+    .then(result => {
+        uh.mailVerify(result.data.insert_auth.returning[0].email,
+                        result.data.insert_auth.returning[0].email_otp)
+        .then(result => res.json(result))
+        .catch(err => res.send(err));
+    })
     .catch(err => {
         console.log(err);
         res.json(err)})
