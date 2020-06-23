@@ -96,7 +96,7 @@
     let signup = new Vue({
         el: "#root",
         data: {
-            email: "joeydash@saarang.org",
+            email: "",
             otp: "",
             input_otp: false
         },
@@ -108,8 +108,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: signup.email,
-                        username: signup.name
+                        email: signup.email
                     })
                 })
                     .then(res => res.json())
