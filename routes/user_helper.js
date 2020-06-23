@@ -1,56 +1,50 @@
 const fetch = require('node-fetch');
-var API_KEY = '98631eee81199733066c20f5c2a88e41-9a235412-8a0a2a2e';
-var DOMAIN = 'shoptohome.co.in';
-var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
-
-// RANDOM 6 DIGIT OTP GENERATOR
-let otp = Math.floor(100000 + Math.random() * 900000);
+const API_KEY = '98631eee81199733066c20f5c2a88e41-9a235412-8a0a2a2e';
+const DOMAIN = 'shoptohome.co.in';
+const mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 
 
 let app = {
-    sendOTPMail: (email) => {
+    sendOTPMail: (email, otp) => {
         return new Promise((resolve, reject) => {
             const data = {
                 from: "OTP Service <otp@shoptohome.co.in>",
                 to: email,
                 subject: 'No-Reply: Your OTP',
-                text: 'Your OTP is ' + user_helper.otp
+                text: 'Your OTP is ' + otp
             };
 
             mailgun.messages().send(data, (error, body) => {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                } else {
-                    // console.log(body);
-                    resolve(body);
-                }
+                if (error) reject(error); else resolve(body);
             });
         })
     },
-    email_signup : (email, username)=>{
+    email_signup: (email) => {
         return new Promise((resolve, reject) => {
-            fetch('https://lmsdb.herokuapp.com/v1/graphql',{
+            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
                 method: "post",
-                header: {
+                headers: {
                     'x-hasura-admin-secret': 'joeydash'
                 },
                 body: JSON.stringify({
-                    query : `mutation MyMutation($email_otp: numeric = "", $email: String = "", $username: String = "") {
-                              insert_auth(objects: {email: $email, email_otp: $email_otp, username: $username}, on_conflict: {constraint: auth_email_carrier_key, update_columns: email_otp}) {
+                    query: `mutation MyMutation($email_otp: numeric = "", $email: String = "") {
+                              insert_auth(objects: {email: $email, email_otp: $email_otp}, on_conflict: {constraint: auth_email_carrier_key, update_columns: email_otp}) {
                                 affected_rows
+                                returning {
+                                  email_otp
+                                  email
+                                }
                               }
                             }`,
                     variables: {
-                        "email_otp": user_helper.otp,
-                        "email": email,
-                        "username": username
+                        "email_otp": Math.floor(100000 + Math.random() * 900000),
+                        "email": email
                     }
                 })
             })
-            .then(res => res.json())
-            .then(res => resolve(res))
-            .catch(err => reject(err));
+                .then(res => res.json())
+                .then(res => resolve(res))
+                .catch(err => reject(err));
         })
     },
     getGithub: () => {

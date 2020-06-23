@@ -12,9 +12,13 @@ router.get('/', (req, res, next) => {
 router.post('/email_signup', (req, res, next) => {
     uh.email_signup(req.body.email, req.body.username)
     .then(result => {
-        uh.sendOTPMail(req.body.email).then(result => res.json(result)).catch(err => res.send(err));
+        console.log(result);
+        uh.sendOTPMail(result.data.insert_auth.returning[0].email,result.data.insert_auth.returning[0].email_otp).then(result => res.json(result)).catch(err => res.send(err));
     })
-    .catch(err => res.json(err))
+    .catch(err => {
+        console.log(err);
+        res.json(err)})
 });
+
 
 module.exports = router;

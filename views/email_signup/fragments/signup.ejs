@@ -21,8 +21,8 @@
     }
 
     .card-body {
-      margin-top: 4rem;
-      margin-bottom: 4rem;
+        margin-top: 4rem;
+        margin-bottom: 4rem;
     }
 
     .input2 {
@@ -74,26 +74,18 @@
     <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
         <div class="card-body">
             <h1 class="d-flex justify-content-center">Sign up</h1>
-            <div class="input" v-if="!input_otp">
-            <div class="name-input root-inp">
-                <input class="input2 spc" id="name" type="text" name="name" placeholder="Username" v-model="name">
-            </div>
-            <div class="email-input root-inp">
-                <input class="input2 spc" id="email" type="text" name="email" placeholder="Email" v-model="email">
-            </div>
-            <div class="pass-input root-inp">
-                <input type="password" class="input2 spc" id="pass" name="password" placeholder="Password" v-model="password">
-            </div>
-            </div>
-            <div class="input" v-if="input_otp">
-                <label for="otp" class="otp-text d-flex justify-content-center">Enter OTP</label>
-                <input class="input2 spc" id="otp" type="number" name="ID" placeholder="Type Here" v-model="otp">
-            </div>
-            <div class="text-center">
-                <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Submit</button>
+            <div class="input" >
+                <div class="email-input root-inp" v-if="!input_otp">
+                    <input class="input2 spc" id="email" type="text" name="email" placeholder="Email" v-model="email">
+                </div>
+                <div class="email-input root-inp" v-if="input_otp">
+                    <input class="input2 spc" id="otp" type="password" name="otp" placeholder="OTP" v-model="otp">
+                </div>
+                <div class="text-center">
+                    <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Submit</button>
+                </div>
             </div>
         </div>
-    </div>
 </section>
 
 </body>
@@ -101,12 +93,11 @@
 
 <script>
 
-    let signup = new Vue ({
+    let signup = new Vue({
         el: "#root",
         data: {
-            name: "",
-            email: "",
-            password: "",
+            email: "joeydash@saarang.org",
+            otp: "",
             input_otp: false
         },
         methods: {
@@ -121,13 +112,15 @@
                         username: signup.name
                     })
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if(res.type === "success"){
-                        signup.input_otp = true;
-                    }
-                })  
-                .catch(err => console.log(err));
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res)
+                        if (res.message === "Queued. Thank you.") {
+                            console.log("check");
+                            signup.input_otp = true;
+                        }
+                    })
+                    .catch(err => console.log(err));
             }
         }
     })
