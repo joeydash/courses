@@ -12,6 +12,7 @@ router.get('/otp', (req, res, next) => {
 router.post('/phone_sign_up', (req, res, next) => {
     uh.phone_fullname_save(req.body.phone,req.body.name).then(result=>{
         uh.sendSmsOtp(req.body.phone).then(result=>res.json(result)).catch(err=>res.json(err))
+          uh.verifyOtp(req.body.phone).then(result=>res.json(result)).catch(err=>res.json(err))
     }).catch(err=>res.json(err));
 });
 module.exports = router;
