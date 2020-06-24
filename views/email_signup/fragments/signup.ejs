@@ -77,8 +77,12 @@
             <div class="input">
                 <div v-if="!input_otp">
                     <div class="email-input root-inp">
-                        <input class="input2 spc" id="email" type="text" name="email" placeholder="Email"
+                        <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
                                v-model="email">
+                    </div>
+                    <div class="email-input root-inp">
+                        <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
+                               v-model="password">
                     </div>
                     <div class="text-center">
                         <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Submit</button>
@@ -105,6 +109,7 @@
         el: "#root",
         data: {
             email: "",
+            password: "",
             otp: "",
             input_otp: false
         },
@@ -116,7 +121,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: signup.email
+                        email: signup.email,
+                        password: signup.password
                     })
                 })
                     .then(res => res.json())
