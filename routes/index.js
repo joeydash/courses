@@ -12,29 +12,29 @@ var fs = require('fs');
 //   res.render('docs_view', { course: req.params.docs });
 // });
 
-router.get('/vasu', function(req, res, next) {
-	res.render('vasu');
+router.get('/vasu', function (req, res, next) {
+    res.render('vasu');
 });
-router.get('/vaibhav', function(req, res, next) {
-  	res.render('vaibhav');
+router.get('/vaibhav', function (req, res, next) {
+    res.render('vaibhav');
 });
 
-router.get('/joey', function(req, res, next) {
+router.get('/joey', function (req, res, next) {
     res.render('joey');
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     res.render('home/index');
 });
-router.get('/course', function(req, res, next) {
+router.get('/course', function (req, res, next) {
     res.render('course/index');
 });
 
-router.get('/add_course', function(req, res, next) {
+router.get('/add_course', function (req, res, next) {
     res.render('add_course/index');
 });
 
-router.get('/edit_course', function(req, res, next) {
+router.get('/edit_course', function (req, res, next) {
     res.render('edit_course/index');
 });
 
@@ -42,11 +42,11 @@ router.get('/signup', function (req, res, next) {
     res.render('email_signup/index');
 });
 
-router.get('/forum', function(req, res, next) {
+router.get('/forum', function (req, res, next) {
     res.render('forum/index');
 })
 
-router.get('/test',(req, res, next)=>{
+router.get('/test', (req, res, next) => {
     res.render('home/index')
 });
 module.exports = router;

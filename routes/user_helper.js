@@ -27,17 +27,17 @@ let app = {
                     'x-hasura-admin-secret': 'joeydash'
                 },
                 body: JSON.stringify({
-                    query: `mutation MyMutation($email_otp: numeric = "", $email: String = "") {
-                              insert_auth(objects: {email: $email, email_otp: $email_otp}, on_conflict: {constraint: auth_email_carrier_key, update_columns: email_otp}) {
+                    query: `mutation MyMutation($otp: numeric = "", $email: String = "") {
+                              insert_auth(objects: {email: $email, otp: $otp}, on_conflict: {constraint: auth_email_carrier_key, update_columns: otp}) {
                                 affected_rows
                                 returning {
-                                  email_otp
+                                  otp
                                   email
                                 }
                               }
                             }`,
                     variables: {
-                        "email_otp": Math.floor(100000 + Math.random() * 900000),
+                        "otp": Math.floor(100000 + Math.random() * 900000),
                         "email": email
                     }
                 })
@@ -55,12 +55,12 @@ let app = {
                     'x-hasura-admin-secret': 'joeydash'
                 },
                 body: JSON.stringify({
-                    query: `mutation MyMutation($email: String = "", $email_otp: numeric = "") {
-                            update_auth(where: {email_otp: {_eq: $email_otp}, email: {_eq: $email}}, _set: {email_verified: true}) {
+                    query: `mutation MyMutation($email: String = "", $otp: numeric = "") {
+                            update_auth(where: {otp: {_eq: $otp}, email: {_eq: $email}}, _set: {email_verified: true}) {
                                 affected_rows}
                             }`,
                     variables: {
-                        "email_otp": otp,
+                        "otp": otp,
                         "email": email
                     }
                 })
