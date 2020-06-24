@@ -9,11 +9,13 @@ router.get('/', (req, res, next) => {
 router.get('/otp', (req, res, next) => {
     uh.sendSmsOtp().then(result => res.json(result)).catch(err => res.send(err));
 });
+
 router.post('/phone_sign_up', (req, res, next) => {
-    uh.phone_save(req.body.phone).then(result => {
+    uh.phone_save(req.body.phone, req.body.password).then(result => {
         uh.sendSmsOtp(req.body.phone).then(result => res.json(result)).catch(err => res.json(err))
     }).catch(err => res.json(err));
 });
+
 router.post('/verify_otp', (req, res, next) => {
     uh.verifyOtp(req.body.phone, req.body.otp).then(result => {
         if (result.type === "success") {
