@@ -78,16 +78,17 @@
                 <div class="name-input root-inp" v-if="type_otp">
                     <input class="input2 spc" id="name" type="text" name="name" placeholder="OTP" v-model="otp">
                 </div>
-                <div class="name-input root-inp" v-if="!type_otp">
-                    <input class="input2 spc" id="name" type="text" name="name" placeholder="Full Name" v-model="name">
-                </div>
                 <div class="email-input root-inp" v-if="!type_otp">
                     <input class="input2 spc" id="phone" type="tel" name="phone" placeholder="Phone Number"
                            v-model="phone">
                 </div>
             </div>
             <div class="text-center">
-                <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Submit</button>
+                <button v-if="type_otp" type="button" @click="verify_otp" class="btn btn-dark btn-sm my-style">Verify
+                    OTP
+                </button>
+                <button v-if="!type_otp" type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign Up
+                </button>
             </div>
         </div>
     </div>
@@ -102,8 +103,7 @@
         el: "#root",
         data: {
             type_otp: false,
-            name: "",
-            phone: "",
+            phone: "919148816419",
             otp: ""
 
         },
@@ -115,19 +115,38 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        name: signup.name,
                         phone: signup.phone
                     })
                 })
                     .then(res => res.json())
                     .then(res => {
-                        if(res.type==="success"){
+                        if (res.type === "success") {
                             signup.type_otp = true;
                         }
                     })
                     .catch(err => console.error(err));
+            },
+            verify_otp: () => {
+                fetch('/user/verify_otp', {
+                    method: "post",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        otp: signup.otp,
+                        phone: signup.phone
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(JSON.stringify(res));
+                        if (res.data.update_auth.affected_rows > 0) {
+                            alert("success");
+                        }
+                    })
+                    .catch(err => console.error(err));
             }
-        }
+        },
     })
 
 </script>
