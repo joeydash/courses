@@ -22,7 +22,7 @@ let app = {
             });
         })
     },
-    email_signup: (email, password) => {
+    email_signup: (username, email, password) => {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, function (err, salt) {
                 bcrypt.hash(password, salt, function (err, hash) {
@@ -32,8 +32,8 @@ let app = {
                             'x-hasura-admin-secret': 'joeydash'
                         },
                         body: JSON.stringify({
-                            query: `mutation MyMutation($email: String = "", $password: String = "", $otp: numeric = "", $salt: String = "") {
-                                      insert_auth(objects: {email: $email, password: $password, otp: $otp, salt: $salt, carrier: "mail"}, on_conflict: {constraint: auth_email_carrier_key, update_columns: otp}) {
+                            query: `mutation MyMutation($email: String = "", $password: String = "", $otp: numeric = "", $salt: String = "", $username: String = "") {
+                                      insert_auth(objects: {email: $email, password: $password, otp: $otp, salt: $salt, carrier: "mail", username: $username}, on_conflict: {constraint: auth_email_carrier_key, update_columns: otp}) {
                                         affected_rows
                                         returning {
                                           email
@@ -42,6 +42,7 @@ let app = {
                                       }
                                     }`,
                             variables: {
+                                "username": username,
                                 "salt": salt,
                                 "email": email,
                                 "password": hash,

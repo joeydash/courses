@@ -76,11 +76,19 @@
             <h1 class="d-flex justify-content-center">Sign up</h1>
             <div class="input">
                 <div v-if="!input_otp">
-                    <div class="email-input root-inp">
+                    <div class="root-inp">
+                        <input class="input2 spc" id="username" type="text" name="username" placeholder="User Name"
+                               v-model="username">
+                    </div>
+                    <div class="root-inp">
+                        <input class="input2 spc" id="name" type="text" name="name" placeholder="Full Name"
+                               v-model="name">
+                    </div>
+                    <div class="root-inp">
                         <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
                                v-model="email">
                     </div>
-                    <div class="email-input root-inp">
+                    <div class="root-inp">
                         <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
                                v-model="password">
                     </div>
@@ -108,6 +116,8 @@
     let signup = new Vue({
         el: "#root",
         data: {
+            name: "",
+            username: "",
             email: "",
             password: "",
             otp: "",
@@ -121,6 +131,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        name: signup.name,
+                        username: signup.usernamename,
                         email: signup.email,
                         password: signup.password
                     })

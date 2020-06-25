@@ -73,7 +73,7 @@
 <section id="root" class="row">
     <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
         <div class="card-body">
-            <h1 class="d-flex justify-content-center">Sign up</h1>
+            <h1 class="d-flex justify-content-center">Sign In</h1>
             <div class="input">
                 <div v-if="!input_otp">
                     <div class="email-input root-inp">
@@ -127,7 +127,9 @@
                 })
                     .then(res => res.json())
                     .then(res => {
-                        console.log(JSON.stringify(res))
+                        console.log("success");
+                        alert("signin successful");
+                        // console.log(JSON.stringify(res))
                         // if (res.message === "Queued. Thank you.") {
                         //     console.log("check");
                         //     signup.input_otp = true;

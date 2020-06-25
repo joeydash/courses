@@ -8,7 +8,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/email_signup', (req, res, next) => {
-    uh.email_signup(req.body.email, req.body.password)
+    uh.email_signup(req.body.username, req.body.email, req.body.password)
         .then(result => {
             uh.sendOTPMail(result.data.insert_auth.returning[0].email,
                 result.data.insert_auth.returning[0].otp)
