@@ -41,7 +41,9 @@ router.get('/edit_course', function (req, res, next) {
 router.get('/signup', function (req, res, next) {
     res.render('email_signup/index');
 });
-
+router.get('/signin', function (req, res, next) {
+    res.render('email_signin/index');
+});
 router.get('/forum', function (req, res, next) {
     res.render('forum/index');
 })

@@ -21,6 +21,17 @@ router.post('/email_signup', (req, res, next) => {
         })
 });
 
+router.post('/email_signin', (req, res, next) => {
+    uh.email_signin(req.body.email, req.body.password)
+        .then(result => {
+            res.json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err)
+        })
+});
+
 router.post('/verify_email_signup', (req, res, next) => {
     uh.mailVerify(req.body.email, req.body.otp)
         .then(result => res.json(result))
