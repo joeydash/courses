@@ -5,8 +5,8 @@ const mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const jwt = require('jsonwebtoken');
 
+const jwt = require('jsonwebtoken');
 const jWTKey = "joeydash";
 
 let app = {
@@ -117,7 +117,6 @@ let app = {
                 .then(res => resolve(res)).catch(err => reject(err))
         })
     },
-
     phone_signin: (phone, password) => {
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {
@@ -188,7 +187,6 @@ let app = {
             });
         });
     },
-
     mailVerify: (email, otp) => {
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {

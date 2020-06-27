@@ -78,9 +78,6 @@
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
                             v-model="email">
-                    <div class="" v-if="email_wrong">
-                        <h1>wrong</h1>
-                    </div>
                 </div>
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
@@ -102,31 +99,57 @@
         el: "#root",
         data: {
             email: "",
-            password: "",
-            email_wrong: false
+            password: ""
         },
         methods: {
             signin: () => {
-                fetch('/user/email_signin', {
+                // let passw = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$)/;
+                // let mail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$/;
+                if(true){
+                    fetch('/user/email_signin', {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: signin.email,
+                            password: signin.password
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.type === "success") {
+                            localStorage.setItem("auth_token", res.auth_token);
+                            alert("signin successful");
+                        }
+                        // if(res.status === "failed" && res.error === "email"){
+                        //     signin.email_wrong = true;
+                        // }
+                        // else if(res.data.auth.length == 0) {
+                        //     alert("password wrong");
+                        // }
+                        // else if(res.data.auth.length > 0) { alert("signin successful"); }
+                    })
+                    .catch(err => console.log(err));
+                } else {
+                    alert("Invalid Email or password!");
+                }
+            },
+            get_user_data: () => {
+                console.log("sas")
+                fetch('/user/user_info', {
                     method: "post",
                     headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: signin.email,
-                        password: signin.password
-                    })
+                        'auth_token': localStorage.getItem('auth_token')
+                    }
                 })
                     .then(res => res.json())
                     .then(res => {
-                        console.log(res);
-                        if(res.status === "failed" && res.error === "email"){
-                            signin.email_wrong = true;
-                        }
-                        else if(res.data.auth.length == 0) {
-                            alert("password wrong");
-                        }
-                        else if(res.data.auth.length > 0) { alert("signin successful"); }
+                        console.log(JSON.stringify(res));
+                        // if (res.type === "success") {
+                        //     localStorage.setItem("auth_token", res.auth_token);
+                        // alert("success");
+                        // }
                     })
                     .catch(err => console.log(err));
             }

@@ -24,7 +24,13 @@ router.post('/email_signup', (req, res, next) => {
 router.post('/email_signin', (req, res, next) => {
     uh.email_signin(req.body.email, req.body.password)
         .then(result => {
-            res.json(result);
+            if (result.data.auth.length > 0) {
+                uh.getSignedAuthKey(result).then(result => {
+                    res.json(result)
+                }).catch(err => res.json(err))
+            } else {
+                res.json({ type: "failure", error: "Phone Number or Password not found" })
+            }
         })
         .catch(err => {
             console.log(err);
