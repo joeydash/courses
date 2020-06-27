@@ -1,0 +1,160 @@
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Bellota:wght@700&family=Merriweather&family=Piedra&family=Raleway:wght@300&display=swap');
+
+    .shadow {
+        box-shadow: 0 2px 5px 0;
+    }
+
+    .my-style {
+        font-family: 'Bellota', serif;
+        font-size: 1.5rem;
+    }
+
+    .card {
+        background-color: #eeeeee;
+        justify-content: center;
+        margin-top: 3.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 4px 5px 0 #00000077, 0 6px 10px 0 #00000077;
+    }
+
+    .card-body {
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
+
+    .input2 {
+        border-style: none;
+        border-radius: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        border-color: #f4f7c5;
+        background-color: #fff;
+        color: #393e46;
+        display: block;
+        font-size: 15px;
+        font-family: 'Raleway', sans-serif;
+        line-height: 1.2;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        text-indent: 0.5rem;
+        width: 60%;
+    }
+
+    .otp-text {
+        color: #000;
+        font-size: 1.25rem;
+        font-family: 'Merriweather';
+        margin-bottom: 5rem;
+        text-align: center;
+    }
+
+    .root-inp {
+        display: block;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .spc {
+        padding-top: 7px;
+        padding-bottom: 8px;
+    }
+
+    h1 {
+        margin: 0 0 20px 0;
+        font-weight: 300;
+        font-size: 28px;
+    }
+
+</style>
+
+<section id="root" class="row">
+    <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
+        <div class="card-body">
+            <h1 class="d-flex justify-content-center">Sign up</h1>
+            <div class="input">
+                <div v-if="!input_otp">
+                    <div class="root-inp">
+                        <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
+                               v-model="email">
+                    </div>
+                    <div class="root-inp">
+                        <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
+                               v-model="password">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Submit</button>
+                    </div>
+                </div>
+                <div v-if="input_otp">
+                    <div class="email-input root-inp">
+                        <input class="input2 spc" id="otp" type="password" name="otp" placeholder="OTP" v-model="otp">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" @click="verify" class="btn btn-dark btn-sm my-style">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+</body>
+
+
+<script>
+
+    let signup = new Vue({
+        el: "#root",
+        data: {
+            email: "",
+            password: "",
+            otp: "",
+            input_otp: false
+        },
+        methods: {
+            register: () => {
+                fetch('/user/email_signup', {
+                    method: "post",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: signup.email,
+                        password: signup.password
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res)
+                        if (res.message === "Queued. Thank you.") {
+                            console.log("check");
+                            signup.input_otp = true;
+                        }
+                    })
+                    .catch(err => console.log(err));
+            },
+            verify: () => {
+                fetch('/user/verify_email_signup', {
+                    method: "post",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: signup.email,
+                        otp: signup.otp
+                    })
+                }).then(res => res.json())
+                    .then(res => {
+                        console.log(JSON.stringify(res));
+                        if (res.data.update_auth.affected_rows > 0) {
+                            alert('verified');
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+        }
+    })
+
+</script>
