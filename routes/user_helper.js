@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -20,29 +21,31 @@ let app = {
     },
     phone_save: (phone, password) => {
         return new Promise((resolve, reject) => {
-            bcrypt.hash(password, saltRounds, function (err, hash) {
+            bcrypt.genSalt(saltRounds, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {
                 method: "post",
                 headers: {
                     'x-hasura-access-key': "joeydash"
                 },
                 body: JSON.stringify({
-                    query: `mutation MyMutation($phone: String = "",, $password: String = "") {
-                              insert_auth(objects: {phone: $phone, password: $password}, on_conflict: {update_columns: phone, constraint: auth_phone_carrier_key}) {
+                query: `mutation MyMutation($phone: String = "", $password: String = "",  $salt: String = "") {
+                                insert_auth(objects: {phone: $phone, password: $password,  salt: $salt, carrier: "phone"}, on_conflict: {update_columns: phone, constraint: auth_phone_carrier_key}) {
                                 affected_rows
                               }
                             }`,
-                    variables: {
+                variables: {
+                        "salt": salt,
                         "phone": phone,
                         "password": hash
                     }
                 })
             }).then(res => res.json())
-                .then(res => resolve(res)).catch(err => reject(err))
-        })
-        })
-
-    },
+              .then(res => resolve(res)).catch(err => reject(err))
+        });
+      });
+   })
+   },
     phone_verified_db_change: (phone) => {
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {
@@ -63,7 +66,61 @@ let app = {
             }).then(res => res.json())
                 .then(res => resolve(res)).catch(err => reject(err))
         })
-    }
+    },
+
+    phone_signin: (phone, password) => {
+        return new Promise((resolve, reject) => {
+            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                method: "post",
+                headers: {
+                    'x-hasura-admin-secret': 'joeydash'
+                },
+                body: JSON.stringify({
+                    query: `query MyQuery($phone: String = "") {
+                              auth(where: {phone: {_eq: $phone}, carrier: {_eq: "phone"}}) {
+                                salt
+                              }
+                            }`,
+                    variables: {
+                      "phone": phone,
+                    }
+                })
+            }).then(res => res.json()).then(res => {
+                if (res.data.auth.length > 0) {
+                    bcrypt.hash(password, res.data.auth[0].salt, function (err, hash) {
+                        fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                            method: "post",
+                            headers: {
+                                'x-hasura-admin-secret': 'joeydash'
+                            },
+                            body: JSON.stringify({
+                                query: `query MyQuery($phone: String = "", $password: String = "") {
+                                          auth(where: {phone: {_eq: $phone}, carrier: {_eq: "phone"}, password: {_eq: $password}}) {
+                                            username
+                                            phone_verified
+                                            phone
+                                            id
+                                            fullname
+                                            email_verified
+                                            email
+                                            dp
+                                            carrier
+                                            career_user_id
+                                          }
+                                        }`,
+                                variables: {
+                                    "phone": phone,
+                                    "password": hash
+                                }
+                            })
+                        }).then(res => res.json()).then(res => resolve(res)).catch(err => reject(err));
+                    });
+                } else {
+                    reject({"status": "failed", "error": "password or email not found"});
+                }
+            }).catch(err => reject(err));
+        });
+    },
 }
 
 

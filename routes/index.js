@@ -38,12 +38,12 @@ router.get('/edit_course', function(req, res, next) {
     res.render('edit_course/index');
 });
 
-router.get('/signin', function(req, res, next) {
+router.get('/signup', function(req, res, next) {
     res.render('new_user/index');
 });
 
-router.get('/login', function(req, res, next) {
-    res.render('login_user/index');
+router.get('/signin', function(req, res, next) {
+    res.render('signin_user/index');
 });
 
 router.get('/sms_otp', function(req, res, next) {

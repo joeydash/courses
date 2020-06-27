@@ -25,4 +25,15 @@ router.post('/verify_otp', (req, res, next) => {
         }
     }).catch(err => res.send(err));
 });
+
+router.post('/phone_signin', (req, res, next) => {
+    uh.phone_signin(req.body.phone, req.body.password)
+           .then(result => {
+            res.json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err)
+        })
+});
 module.exports = router;

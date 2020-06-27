@@ -77,19 +77,58 @@
 <section id="root" class="row">
     <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
       <div class="card-body">
-        <h1 class="d-flex justify-content-center">Log In</h1>
+        <h1 class="d-flex justify-content-center">Sign in</h1>
         <!-- part1 -->
-        <div class="input" v-if="!input_otp">
+        <div class="input" v-if="input_otp">
           <div class="email-input root-inp">
             <input class="input2 spc" id="phone" type="tel" name="phone" placeholder="Phone Number" v-model="phone">
           </div>
           <div class="email-input root-inp" >
             <input class="input2 spc" id="password" type="password" name="password" placeholder="Password" v-model="password">
           </div>
-          <button type="button" class="btn btn-dark btn-sm my-style">Log in</button>
+          <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign In</button>
         </div>
-        <!-- part2 -->
-
       </div>
     </div>
 </section>
+
+</body>
+
+
+<script>
+
+    let signin = new Vue({
+        el: "#root",
+        data: {
+            input_otp: true,
+            password: "",
+            phone: "91"
+
+        },
+        methods: {
+            register: () => {
+                fetch('/user/phone_signin', {
+                    method: "post",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: signin.phone,
+                      password: signin.password
+                    })
+                })
+                  .then(res => res.json())
+                  .then(res => {
+                   console.log("sucess");
+                   alert("signed in");
+                   //   if (res.type === "success") {
+                   //     console.log("check");
+                   //    signup.input_otp = true;
+                   // }
+               })
+                    .catch(err => console.log(err));
+            }
+        },
+    })
+
+</script>
