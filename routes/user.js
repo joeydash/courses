@@ -19,21 +19,38 @@ router.post('/phone_sign_up', (req, res, next) => {
 router.post('/verify_otp', (req, res, next) => {
     uh.verifyOtp(req.body.phone, req.body.otp).then(result => {
         if (result.type === "success") {
-            uh.phone_verified_db_change(req.body.phone).then(result => res.json(result)).catch(err => res.json(err))
+            uh.phone_verified_db_change(req.body.phone).then(result => {
+                uh.getSignedAuthKey(result).then(result => {
+                    res.json(result)
+                }).catch(err => res.json(err))
+            }).catch(err => res.json(err))
         } else {
-            res.json({"data": {"update_auth": {"affected_rows": 0}}})
+            res.json({"type": "failure", "error": "OTP not correct"})
         }
     }).catch(err => res.send(err));
 });
 
 router.post('/phone_signin', (req, res, next) => {
     uh.phone_signin(req.body.phone, req.body.password)
-           .then(result => {
-            res.json(result);
+        .then(result => {
+            if (result.data.auth.length > 0) {
+                uh.getSignedAuthKey(result).then(result => {
+                    res.json(result)
+                }).catch(err => res.json(err))
+            } else {
+                res.json({type: "failure", error: "Phone Number or Password not found"})
+            }
         })
         .catch(err => {
             console.log(err);
             res.json(err)
         })
 });
+
+router.post('/user_info', (req, res, next) => {
+    uh.verifyAuthKey(req.get('auth_token')).then(result => {
+        res.json(result);
+    }).catch(err => res.json(err));
+});
+
 module.exports = router;

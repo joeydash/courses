@@ -1,7 +1,9 @@
 const fetch = require('node-fetch');
-
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 const saltRounds = 10;
+const jWTKey = "joeydash";
 
 let app = {
     getGithub: () => {
@@ -22,30 +24,30 @@ let app = {
     phone_save: (phone, password) => {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-            fetch('https://lmsdb.herokuapp.com/v1/graphql', {
-                method: "post",
-                headers: {
-                    'x-hasura-access-key': "joeydash"
-                },
-                body: JSON.stringify({
-                query: `mutation MyMutation($phone: String = "", $password: String = "",  $salt: String = "") {
+                bcrypt.hash(password, salt, function (err, hash) {
+                    fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                        method: "post",
+                        headers: {
+                            'x-hasura-access-key': "joeydash"
+                        },
+                        body: JSON.stringify({
+                            query: `mutation MyMutation($phone: String = "", $password: String = "",  $salt: String = "") {
                                 insert_auth(objects: {phone: $phone, password: $password,  salt: $salt, carrier: "phone"}, on_conflict: {update_columns: phone, constraint: auth_phone_carrier_key}) {
                                 affected_rows
                               }
                             }`,
-                variables: {
-                        "salt": salt,
-                        "phone": phone,
-                        "password": hash
-                    }
-                })
-            }).then(res => res.json())
-              .then(res => resolve(res)).catch(err => reject(err))
-        });
-      });
-   })
-   },
+                            variables: {
+                                "salt": salt,
+                                "phone": phone,
+                                "password": hash
+                            }
+                        })
+                    }).then(res => res.json())
+                        .then(res => resolve(res)).catch(err => reject(err))
+                });
+            });
+        })
+    },
     phone_verified_db_change: (phone) => {
         return new Promise((resolve, reject) => {
             fetch('https://lmsdb.herokuapp.com/v1/graphql', {
@@ -82,7 +84,7 @@ let app = {
                               }
                             }`,
                     variables: {
-                      "phone": phone,
+                        "phone": phone,
                     }
                 })
             }).then(res => res.json()).then(res => {
@@ -116,11 +118,28 @@ let app = {
                         }).then(res => res.json()).then(res => resolve(res)).catch(err => reject(err));
                     });
                 } else {
-                    reject({"status": "failed", "error": "password or email not found"});
+                    reject({type: "failure", error: "Phone Number or Password not found"});
                 }
             }).catch(err => reject(err));
         });
     },
+    getSignedAuthKey: (data) => {
+        return new Promise((resolve, reject) => {
+            jwt.sign(data, jWTKey, function (err, token) {
+                if (err) reject({type: "failure", error: err});
+                resolve({type: "success", auth_token: token})
+            });
+        });
+    },
+    verifyAuthKey: (token) => {
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, jWTKey, function (err, payload) {
+                // if token alg != RS256,  err == invalid signature
+                if (err) reject({type: "failure", error: err});
+                resolve(payload);
+            });
+        });
+    }
 }
 
 
