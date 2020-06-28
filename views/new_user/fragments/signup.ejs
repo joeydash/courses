@@ -26,7 +26,7 @@
     }
 
     .input {
-      text-align: center;
+        text-align: center;
     }
 
     .input2 {
@@ -67,37 +67,39 @@
     }
 
     h1 {
-        margin: 0 0 20px 0;
+        margin: 0 0 20px;
         font-weight: 300;
         font-size: 28px;
     }
-    
+
 </style>
 
 <section id="root" class="row">
     <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
-      <div class="card-body">
-        <h1 class="d-flex justify-content-center">Sign up</h1>
-        <!-- part1 -->
-        <div class="input" v-if="!input_otp">
-          <div class="email-input root-inp">
-            <input class="input2 spc" id="phone" type="tel" name="phone" placeholder="Phone Number" v-model="phone">
-          </div>
-          <div class="email-input root-inp" >
-            <input class="input2 spc" id="password" type="password" name="password" placeholder="Password" v-model="password">
-          </div>
-          <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign Up</button>
+        <div class="card-body">
+            <h1 class="d-flex justify-content-center">Sign up</h1>
+            <!-- part1 -->
+            <div class="input" v-if="!input_otp">
+                <div class="email-input root-inp">
+                    <input class="input2 spc" id="phone" type="tel" name="phone" placeholder="Phone Number"
+                           v-model="phone">
+                </div>
+                <div class="email-input root-inp">
+                    <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
+                           v-model="password">
+                </div>
+                <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign Up</button>
+            </div>
+            <!-- part2 -->
+            <div class="input" v-if="input_otp">
+                <div class="name-input root-inp">
+                    <input class="input2 spc" id="name" type="text" name="name" placeholder="OTP" v-model="otp">
+                </div>
+                <button type="button" @click="verify_otp" class="btn btn-dark btn-sm my-style">
+                    Verify OTP
+                </button>
+            </div>
         </div>
-        <!-- part2 -->
-        <div class="input" v-if="input_otp">
-          <div class="name-input root-inp">
-              <input class="input2 spc" id="name" type="text" name="name" placeholder="OTP" v-model="otp">
-          </div>
-          <button type="button" @click="verify_otp" class="btn btn-dark btn-sm my-style">
-            Verify OTP
-          </button>
-        </div>
-      </div>
     </div>
 </section>
 
@@ -122,8 +124,8 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        phone: signup.phone,
-                      password: signup.password
+                        phone: "91" + signup.phone,
+                        password: signup.password
                     })
                 })
                     .then(res => res.json())
@@ -147,8 +149,9 @@
                 })
                     .then(res => res.json())
                     .then(res => {
-                        console.log(JSON.stringify(res));
-                        if (res.data.update_auth.affected_rows > 0) {
+                        // console.log(JSON.stringify(res));
+                        if (res.type === "success") {
+                            localStorage.setItem("auth_token", res.auth_token);
                             alert("success");
                         }
                     })
