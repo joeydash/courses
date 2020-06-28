@@ -73,7 +73,7 @@ router.get('/webhook', (req, res, next) => {
             res.json({
                 "X-Hasura-User-Id": result.data.auth[0].id,
                 "X-Hasura-Role": "user",
-                "X-Hasura-Is-Owner": false
+                "X-Hasura-Is-Owner": "false"
             });
         }else{
             res.json({});
