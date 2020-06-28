@@ -9,6 +9,8 @@
     .my-style {
         font-family: 'Bellota', serif;
         font-size: 1.5rem;
+        margin: 4px;
+        margin-bottom: 1rem;
     }
 
     .card {
@@ -62,12 +64,6 @@
         padding-bottom: 8px;
     }
 
-    h1 {
-        margin: 0 0 20px 0;
-        font-weight: 300;
-        font-size: 28px;
-    }
-
 </style>
 
 <section id="root" class="row">
@@ -77,17 +73,17 @@
             <div class="input">
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
-                            v-model="email">
-                    <div class="" v-if="email_wrong">
-                        <h1>wrong</h1>
-                    </div>
+                           v-model="email">
                 </div>
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
-                            v-model="password">
+                           v-model="password">
                 </div>
                 <div class="text-center">
                     <button type="button" @click="signin" class="btn btn-dark btn-sm my-style">Submit</button>
+                    <br>
+                    <button type="button" @click="get_user_data" class="btn btn-dark btn-sm my-style">Get User Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -101,32 +97,59 @@
     let signin = new Vue({
         el: "#root",
         data: {
-            email: "",
-            password: "",
-            email_wrong: false
+            email: "vs201104@gmail.com",
+            password: "lolipop"
         },
         methods: {
             signin: () => {
-                fetch('/user/email_signin', {
+                console.log("dasta")
+                if (/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(signin.email) !== false && signin.password.length!==0) {
+                    fetch('/user/email_signin', {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: signin.email,
+                            password: signin.password
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            // console.log(JSON.stringify(res));
+                            if (res.type === "success") {
+                                localStorage.setItem("auth_token", res.auth_token);
+                                // console.log(res.auth_token);
+                                alert("signin successful");
+                            }
+                            // if(res.status === "failed" && res.error === "email"){
+                            //     signin.email_wrong = true;
+                            // }
+                            // else if(res.data.auth.length == 0) {
+                            //     alert("password wrong");
+                            // }
+                            // else if(res.data.auth.length > 0) { alert("signin successful"); }
+                        })
+                        .catch(err => console.log(err));
+                } else {
+                    alert("Invalid Email or password!");
+                }
+            },
+            get_user_data: () => {
+                console.log("sas")
+                fetch('/user/user_info', {
                     method: "post",
                     headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: signin.email,
-                        password: signin.password
-                    })
+                        'auth_token': localStorage.getItem('auth_token')
+                    }
                 })
                     .then(res => res.json())
                     .then(res => {
-                        console.log(res);
-                        if(res.status === "failed" && res.error === "email"){
-                            signin.email_wrong = true;
-                        }
-                        else if(res.data.auth.length == 0) {
-                            alert("password wrong");
-                        }
-                        else if(res.data.auth.length > 0) { alert("signin successful"); }
+                        console.log(JSON.stringify(res));
+                        // if (res.type === "success") {
+                        //     localStorage.setItem("auth_token", res.auth_token);
+                        // alert("success");
+                        // }
                     })
                     .catch(err => console.log(err));
             }

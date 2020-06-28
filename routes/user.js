@@ -8,7 +8,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/email_signup', (req, res, next) => {
-    uh.email_signup(req.body.username, req.body.email, req.body.password)
+    uh.email_signup(req.body.email, req.body.password)
         .then(result => {
             uh.sendOTPMail(result.data.insert_auth.returning[0].email,
                 result.data.insert_auth.returning[0].otp)
@@ -24,7 +24,13 @@ router.post('/email_signup', (req, res, next) => {
 router.post('/email_signin', (req, res, next) => {
     uh.email_signin(req.body.email, req.body.password)
         .then(result => {
-            res.json(result);
+            if (result.data.auth.length > 0) {
+                uh.getSignedAuthKey(result).then(result => {
+                    res.json(result)
+                }).catch(err => res.json(err))
+            } else {
+                res.json({ type: "failure", error: "Phone Number or Password not found" })
+            }
         })
         .catch(err => {
             console.log(err);
@@ -49,6 +55,7 @@ router.post('/phone_sign_up', (req, res, next) => {
 
 router.post('/verify_otp', (req, res, next) => {
     uh.verifyOtp(req.body.phone, req.body.otp).then(result => {
+        console.log(JSON.stringify(result));
         if (result.type === "success") {
             uh.phone_verified_db_change(req.body.phone).then(result => {
                 uh.getSignedAuthKey(result).then(result => {
