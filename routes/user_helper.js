@@ -24,7 +24,7 @@ let app = {
             });
         })
     },
-    email_signup: (username, email, password) => {
+    email_signup: (email, password) => {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, function (err, salt) {
                 bcrypt.hash(password, salt, function (err, hash) {
@@ -34,8 +34,8 @@ let app = {
                             'x-hasura-admin-secret': 'joeydash'
                         },
                         body: JSON.stringify({
-                            query: `mutation MyMutation($email: String = "", $password: String = "", $otp: numeric = "", $salt: String = "", $username: String = "") {
-                                      insert_auth(objects: {email: $email, password: $password, otp: $otp, salt: $salt, carrier: "mail", username: $username}, on_conflict: {constraint: auth_email_carrier_key, update_columns: otp}) {
+                            query: `mutation MyMutation($email: String = "", $password: String = "", $otp: numeric = "", $salt: String = "") {
+                                      insert_auth(objects: {email: $email, password: $password, otp: $otp, salt: $salt, carrier: "mail"}, on_conflict: {constraint: auth_email_carrier_key, update_columns: otp}) {
                                         affected_rows
                                         returning {
                                           email
@@ -44,7 +44,6 @@ let app = {
                                       }
                                     }`,
                             variables: {
-                                "username": username,
                                 "salt": salt,
                                 "email": email,
                                 "password": hash,
@@ -66,7 +65,9 @@ let app = {
     },
     verifyOtp: (phone, otp) => {
         return new Promise((resolve, reject) => {
-            fetch('https://api.msg91.com/api/v5/otp/verify?mobile=' + phone + '&otp=' + otp + '&authkey=332926ASt3V8aIVwSx5eeb95d4P1').then(res => res.json()).then(res => resolve(res)).catch(onError => reject(onError));
+            fetch('https://api.msg91.com/api/v5/otp/verify?mobile=' + phone + '&otp=' + otp + 
+                    '&authkey=332926ASt3V8aIVwSx5eeb95d4P1')
+            .then(res => res.json()).then(res => resolve(res)).catch(onError => reject(onError));
         })
     },
     phone_save: (phone, password) => {
@@ -131,10 +132,11 @@ let app = {
                               }
                             }`,
                     variables: {
-                        "phone": phone,
+                        "phone": phone
                     }
                 })
             }).then(res => res.json()).then(res => {
+                console.log(res);                
                 if (res.data.auth.length > 0) {
                     bcrypt.hash(password, res.data.auth[0].salt, function (err, hash) {
                         fetch('https://lmsdb.herokuapp.com/v1/graphql', {
@@ -165,7 +167,7 @@ let app = {
                         }).then(res => res.json()).then(res => resolve(res)).catch(err => reject(err));
                     });
                 } else {
-                    reject({type: "failure", error: "Phone Number or Password not found"});
+                    reject({type: "failure123", error: "Phone Number or Password not found"});
                 }
             }).catch(err => reject(err));
         });
@@ -224,10 +226,11 @@ let app = {
                               }
                             }`,
                     variables: {
-                        "email": email,
+                        "email": email
                     }
                 })
             }).then(res => res.json()).then(res => {
+                console.log(JSON.stringify(res));                
                 if (res.data.auth.length > 0) {
                     bcrypt.hash(password, res.data.auth[0].salt, function (err, hash) {
                         fetch('https://lmsdb.herokuapp.com/v1/graphql', {
