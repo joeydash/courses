@@ -67,6 +67,7 @@ router.get('/test', (req, res, next) => {
 });
 
 router.post('/webhook', (req, res, next) => {
+    console.log(req);
     uh.verifyAuthKey(req.get('Authorisation').split(' ')[1]).then(result => {
         if (result.data.auth.length > 0) {
             res.json({
