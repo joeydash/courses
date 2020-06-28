@@ -73,16 +73,17 @@
             <div class="input">
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="email" type="email" name="email" placeholder="Email"
-                            v-model="email">
+                           v-model="email">
                 </div>
                 <div class="email-input root-inp">
                     <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
-                            v-model="password">
+                           v-model="password">
                 </div>
                 <div class="text-center">
                     <button type="button" @click="signin" class="btn btn-dark btn-sm my-style">Submit</button>
                     <br>
-                    <button type="button" @click="get_user_data" class="btn btn-dark btn-sm my-style">Get User Data</button>
+                    <button type="button" @click="get_user_data" class="btn btn-dark btn-sm my-style">Get User Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -101,9 +102,8 @@
         },
         methods: {
             signin: () => {
-                // let passw = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$)/;
-                // let mail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$/;
-                if(true){
+                console.log("dasta")
+                if (/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(signin.email) !== false && signin.password.length!==0) {
                     fetch('/user/email_signin', {
                         method: "post",
                         headers: {
@@ -114,23 +114,23 @@
                             password: signin.password
                         })
                     })
-                    .then(res => res.json())
-                    .then(res => {
-                        // console.log(JSON.stringify(res));
-                        if (res.type === "success") {
-                            localStorage.setItem("auth_token", res.auth_token);
-                            // console.log(res.auth_token);
-                            alert("signin successful");
-                        }
-                        // if(res.status === "failed" && res.error === "email"){
-                        //     signin.email_wrong = true;
-                        // }
-                        // else if(res.data.auth.length == 0) {
-                        //     alert("password wrong");
-                        // }
-                        // else if(res.data.auth.length > 0) { alert("signin successful"); }
-                    })
-                    .catch(err => console.log(err));
+                        .then(res => res.json())
+                        .then(res => {
+                            // console.log(JSON.stringify(res));
+                            if (res.type === "success") {
+                                localStorage.setItem("auth_token", res.auth_token);
+                                // console.log(res.auth_token);
+                                alert("signin successful");
+                            }
+                            // if(res.status === "failed" && res.error === "email"){
+                            //     signin.email_wrong = true;
+                            // }
+                            // else if(res.data.auth.length == 0) {
+                            //     alert("password wrong");
+                            // }
+                            // else if(res.data.auth.length > 0) { alert("signin successful"); }
+                        })
+                        .catch(err => console.log(err));
                 } else {
                     alert("Invalid Email or password!");
                 }
@@ -144,7 +144,7 @@
                     }
                 })
                     .then(res => res.json())
-                    .then(res => {                        
+                    .then(res => {
                         console.log(JSON.stringify(res));
                         // if (res.type === "success") {
                         //     localStorage.setItem("auth_token", res.auth_token);
