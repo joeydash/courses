@@ -19,9 +19,9 @@
     "showdown": "^1.8.6",
     "msg91": "0.0.6",
     "twilio": "^3.46.0",
-    "bcrypt": "^5.0.0"
+    "bcrypt": "^5.0.0",
+    "nodemon": "^2.0.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
   }
 }
