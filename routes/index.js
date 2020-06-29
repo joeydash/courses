@@ -71,7 +71,7 @@ router.get('/webhook', (req, res, next) => {
         if (result.data.auth.length > 0) {
             res.json({
                 "X-Hasura-User-Id": result.data.auth[0].id,
-                "X-Hasura-Allowed-Roles": ["user","manager"],
+                "X-Hasura-Allowed-Roles": "['user','manager']",
                 "x-hasura-default-role": "manager",
                 "X-Hasura-Is-Owner": "false"
             });
