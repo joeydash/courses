@@ -9,6 +9,8 @@
     .my-style {
         font-family: 'Bellota', serif;
         font-size: 1.5rem;
+        margin: 4px;
+        margin-bottom: 1rem;
     }
 
     .card {
@@ -23,10 +25,6 @@
     .card-body {
         margin-top: 4rem;
         margin-bottom: 4rem;
-    }
-
-    .input {
-        text-align: center;
     }
 
     .input2 {
@@ -66,93 +64,87 @@
         padding-bottom: 8px;
     }
 
-    h1 {
-        margin: 0 0 20px 0;
-        font-weight: 300;
-        font-size: 28px;
-    }
-
 </style>
 
 <section id="root" class="row">
-    <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
-        <div class="card-body">
-            <h1 class="d-flex justify-content-center">Sign in</h1>
-            <!-- part1 -->
-            <div class="input" v-if="input_otp">
-                <div class="email-input root-inp">
-                    <input class="input2 spc" id="phone" type="text" name="phone" placeholder="Phone Number"
-                           v-model="phone">
-                </div>
-                <div class="email-input root-inp">
-                    <input class="input2 spc" id="password" type="password" name="password" placeholder="Password"
-                           v-model="password">
-                </div>
-                <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign In</button>
-            </div>
+  <div class="card offset-lg-3 col-lg-6 offset-md-3 col-md-6 col-sm-12">
+    <div class="card-body">
+      <h1 class="d-flex justify-content-center">Sign in</h1>
+      <!-- part1 -->
+      <div class="input" v-if="input_otp">
+        <div class="email-input root-inp">
+          <input class="input2 spc" id="phone" type="text" name="phone" placeholder="Phone Number" v-model="phone">
         </div>
+        <div class="email-input root-inp">
+          <input class="input2 spc" id="password" type="password" name="password" placeholder="Password" v-model="password">
+        </div>
+
+      </div>
+       <div class="text-center">
+        <button type="button" @click="register" class="btn btn-dark btn-sm my-style">Sign In</button>
+        <br>
+        <button type="button" @click="get_user_data" class="btn btn-dark btn-sm my-style">Get User Data</button>
+      </div>
     </div>
-    <button type="button" @click="get_user_data" class="btn btn-dark btn-sm my-style">Get User Data</button>
+  </div>
+
 </section>
 
 </body>
 
 
 <script>
+  let signin = new Vue({
+    el: "#root",
+    data: {
+      input_otp: true,
+      password: "",
+      phone: ""
 
-    let signin = new Vue({
-        el: "#root",
-        data: {
-            input_otp: true,
-            password: "",
-            phone: ""
-
-        },
-        methods: {
-            register: () => {
-                if (signin.phone.length !== 0 && signin.phone.match(/\d/g).length === 10 && signin.password.length!==0) {
-                    fetch('/user/phone_signin', {
-                        method: "post",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            phone: "91" + signin.phone,
-                            password: signin.password
-                        })
-                    })
-                        .then(res => res.json())
-                        .then(res => {
-                            if (res.type === "success") {
-                                localStorage.setItem("auth_token", res.auth_token);
-                                alert("success");
-                            }
-                        })
-                        .catch(err => console.log(err));
-                } else {
-                    alert("Invalid Phone Number on password!");
-                }
-            },
-            get_user_data: () => {
-                console.log("sas")
-                fetch('/user/user_info', {
-                    method: "post",
-                    headers: {
-                        'auth_token': localStorage.getItem('auth_token')
-                    }
-                })
-                    .then(res => res.json())
-                    .then(res => {
-                        console.log(JSON.stringify(res));
-                        // if (res.type === "success") {
-                        //     localStorage.setItem("auth_token", res.auth_token);
-                        // alert("success");
-                        // }
-                    })
-                    .catch(err => console.log(err));
-            }
+    },
+    methods: {
+      register: () => {
+        if (signin.phone.length !== 0 && signin.phone.match(/\d/g).length === 10 && signin.password.length !== 0) {
+          fetch('/user/phone_signin', {
+              method: "post",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                phone: "91" + signin.phone,
+                password: signin.password
+              })
+            })
+            .then(res => res.json())
+            .then(res => {
+              if (res.type === "success") {
+                localStorage.setItem("auth_token", res.auth_token);
+                alert("success");
+              }
+            })
+            .catch(err => console.log(err));
+        } else {
+          alert("Invalid Phone Number on password!");
         }
+      },
+      get_user_data: () => {
+        fetch('/user/user_info', {
+            method: "post",
+            headers: {
+              'auth_token': localStorage.getItem('auth_token')
+            }
+          })
+          .then(res => res.json())
+          .then(res => {
+            console.log(JSON.stringify(res));
+            // if (res.type === "success") {
+            //     localStorage.setItem("auth_token", res.auth_token);
+            // alert("success");
+            // }
+          })
+          .catch(err => console.log(err));
+      }
+    }
 
-    })
-
+  })
 </script>
