@@ -12,6 +12,7 @@ const uh = require('./user_helper')
 //   	res.render('index',{docs_list : JSON.parse(text)});
 //   });
 // });
+
 // router.get('/docs_view/:docs', function(req, res, next) {
 //   res.render('docs_view', { course: req.params.docs });
 // });

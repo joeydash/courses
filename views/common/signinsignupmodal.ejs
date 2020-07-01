@@ -1,6 +1,7 @@
 <div id="signinsignupapp">
     <!-- Modal -->
-    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,28 +12,37 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <div class="form-group">
-                            <label for="userName">User Name</label>
-                            <input type="text" class="form-control" id="userName" v-model="userName">
-                        </div>
-                        <div class="form-group">
+                        <div class="form-group" v-if="!is_register">
                             <label for="exampleInputEmail1">Phone Number</label>
-                            <input type="tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="phoneNumber">
+                            <input type="tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                   v-model="phone">
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" v-model="password">
+                        <div class="form-group" v-if="!is_register">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="password">
+                        </div>
+                        <div class="form-group" v-if="!is_register">
+                            <label for="rpassword">Retype Password</label>
+                            <input type="password" class="form-control" id="rpassword" v-model="rpassword">
+                        </div>
+                        <div class="form-group" v-if="is_register">
+                            <label for="exampleInputPassword1">OTP</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" v-model="otp">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="add_details">Sign up</button>
+                    <button type="button" class="btn btn-secondary" @click="register" v-if="!is_register">Sign up
+                    </button>
+                    <button type="button" class="btn btn-secondary" @click="verify_otp" v-if="is_register" data-dismiss="modal" aria-label="Close">Verify OTP
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -45,8 +55,10 @@
                     <div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                   aria-describedby="emailHelp">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                                else.</small>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
@@ -60,9 +72,61 @@
                 </div>
                 <div class="modal-footer">
                     <a data-dismiss="modal">Sign In</a>
-                    <button type="button" class="btn btn-secondary" >Sign up</button>
+                    <button type="button" class="btn btn-secondary">Sign up</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let signup_signin_app = new Vue({
+        el: "#signinsignupapp",
+        data: {
+            phone: "9148816419",
+            password: "joeydash",
+            rpassword: "joeydash",
+            otp: "",
+            is_register: false
+        },
+        methods: {
+            register: () => {
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0 && signup_signin_app.password === signup_signin_app.rpassword) {
+                    fetch('https://auth.grow90.org/phone/register', {
+                        method: "post",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            password: signup_signin_app.password
+                        })
+                    }).then(result => result.json()).then(result => {
+                        // console.log(result);
+                        if (result.type === "success") {
+                            signup_signin_app.is_register = true;
+
+                        }
+                    }).catch(error => console.error(error));
+                } else {
+                    alert("Invalid Phone Number on password!");
+                }
+            },
+            verify_otp: () => {
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.otp.length !== 0) {
+                    fetch('https://auth.grow90.org/phone/verify_otp', {
+                        method: "post",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            otp: signup_signin_app.otp
+                        })
+                    }).then(result => result.json()).then(result => {
+                        // console.log(result);
+                        localStorage.setItem("auth_token", result.auth_token);
+                    }).catch(error => console.error(error));
+                } else {
+                    alert("Invalid Phone Number on password!");
+                }
+            }
+        }
+    });
+</script>
