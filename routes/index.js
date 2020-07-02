@@ -71,9 +71,17 @@ router.get('/webhook', (req, res, next) => {
     uh.verifyAuthKey(req.get('Authorisation').split(' ')[1]).then(result => {
         if (result.data.auth.length > 0) {
             res.json({
-                "X-Hasura-User-Id": result.data.auth[0].id,
-                "X-Hasura-Role": "user",
-                "X-Hasura-Is-Owner": "false"
+                "sub": "1234567890",
+                "name": "John Doe",
+                "admin": true,
+                "iat": 1516239022,
+                "https://hasura.io/jwt/claims": {
+                    "x-hasura-allowed-roles": ["editor","user", "mod"],
+                    "x-hasura-default-role": "user",
+                    "x-hasura-user-id": result.data.auth[0].id,
+                    "x-hasura-org-id": "123",
+                    "x-hasura-custom": "custom-value"
+                }
             });
         }else{
             res.json({});
