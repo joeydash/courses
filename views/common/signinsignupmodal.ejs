@@ -13,8 +13,8 @@
                 <div class="modal-body">
                     <div>
                         <div class="form-group" v-if="!is_register">
-                            <label for="exampleInputEmail1">Phone Number</label>
-                            <input type="tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" aria-describedby="emailHelp"
                                    v-model="phone">
                         </div>
                         <div class="form-group" v-if="!is_register">
@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-group" v-if="is_register">
                             <label for="exampleInputPassword1">OTP</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" v-model="otp">
+                            <input type="text" class="form-control" id="exampleInputPassword1" v-model="otp">
                         </div>
                     </div>
                 </div>
@@ -54,10 +54,10 @@
                 <div class="modal-body">
                     <div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1"
+                            <label for="phone">Phone Number</label>
+                            <input type="phone" class="form-control" id="phone"
                                    aria-describedby="emailHelp">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            <small id="phone" class="form-text text-muted">We'll never share your details with anyone
                                 else.</small>
                         </div>
                         <div class="form-group">
@@ -71,8 +71,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a data-dismiss="modal">Sign In</a>
-                    <button type="button" class="btn btn-secondary">Sign up</button>
+                    <button type="button" class="btn btn-secondary" @click="signin" aria-label="Close">Sign In</button>
                 </div>
             </div>
         </div>
@@ -83,9 +82,9 @@
     let signup_signin_app = new Vue({
         el: "#signinsignupapp",
         data: {
-            phone: "9148816419",
-            password: "joeydash",
-            rpassword: "joeydash",
+            phone: "",
+            password: "",
+            rpassword: "",
             otp: "",
             is_register: false
         },
@@ -121,12 +120,40 @@
                         })
                     }).then(result => result.json()).then(result => {
                         // console.log(result);
-                        localStorage.setItem("auth_token", result.auth_token);
+                        if (res.type === "success") {
+                            localStorage.setItem("auth_token", res.auth_token);
+                            alert("success");
+                        }
                     }).catch(error => console.error(error));
                 } else {
                     alert("Invalid Phone Number on password!");
                 }
+            },
+            signin: () => {
+      if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0) {
+        fetch('https://auth.grow90.org/phone/signin', {
+            method: "post",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              phone: signup_signin_app.phone,
+              password: signup_signin_app.password
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            if (res.type === "success") {
+              localStorage.setItem("auth_token", res.auth_token);
+              alert("signin successful");
             }
-        }
+          })
+          .catch(err => console.log(err));
+      } else {
+        alert("Invalid Phone Number on password!");
+      }
+    }
+  }
+
     });
 </script>
