@@ -1,13 +1,32 @@
 <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap');
+
+    .form-inline > input {
+        text-indent: 1.5rem;
+    }
+
+    .form-inline > i {
+        position: absolute;
+        padding: 7px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+    }
+
+    .header {
+        font-family: 'Bitter', serif;
+    }
+
     .navbar {
         background-color: rgb(37, 59, 86);
     }
 
-    .navbar-light .navbar-brand {
-        color: white;
+    .nav-link {
+        font-family: 'Open Sans', sans-serif;
     }
 
-    #logo_text:hover {
+    .navbar-light .navbar-brand {
         color: white;
     }
 
@@ -18,11 +37,10 @@
 </style>
 <% include signinsignupmodal.ejs %>
 <nav class="navbar navbar-expand-lg navbar-light" id="my_navbar">
-
     <a class="navbar-brand" href="/">
         <img src="https://grow90.org/grow90/icon/icon_white_square.png" width="30" height="30"
-             class="d-inline-block align-top" alt="">
-        <span id="logo_text">GROW90</span>
+             class="d-inline-block align-top" alt="logo" style="border-radius: 50%;">
+        <span id="logo_text" class="header">GROW90</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,27 +50,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <div class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                       v-model="search_text" @keyup="get_course(search_text)">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit" @click="get_course(search_text)">Search
-                </button>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Courses" aria-label="Search"
+                       v-model="search_text" @keyup="get_course(search_text)" />
+                <i class="fa fa-search" aria-hidden="true"></i>
             </div>
         </ul>
     </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto" style="cursor: pointer;">
-
             <li class="nav-item" v-if="!is_signed_in">
-                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signin_modal"><i
-                            class="fa fa-sign-in" aria-hidden="true"></i> Sign in</a>
+                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signin_modal"> Sign in</a>
             </li>
             <li class="nav-item" v-if="!is_signed_in">
-                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signup_modal"><i
-                            class="fa fa-sign-in nav_icon" aria-hidden="true"></i> Sign up</a>
+                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signup_modal"> Sign up</a>
             </li>
             <li class="nav-item" v-if="is_signed_in">
-                <a style="color:white;" class="nav-link" onclick="logout()"><i
-                            class="fa fa-sign-out nav_icon" aria-hidden="true"></i> Log out</a>
+                <a style="color:white;" class="nav-link" onclick="logout()"> Log out</a>
             </li>
         </ul>
     </div>

@@ -1,3 +1,29 @@
+
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .close, .close:hover {
+        color: aliceblue;
+    }
+
+    .modal-content {
+        color: aliceblue;
+        font-family: 'Raleway', sans-serif;
+    }
+
+    .modal-content {
+        background-color: #121212;
+    }
+
+</style>
+
+
 <div id="signinsignupapp">
     <!-- Modal -->
     <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -22,7 +48,7 @@
                             <input type="password" class="form-control" id="password" v-model="password">
                         </div>
                         <div class="form-group" v-if="!is_register">
-                            <label for="rpassword">Retype Password</label>
+                            <label for="rpassword">Confirm Password</label>
                             <input type="password" class="form-control" id="rpassword" v-model="rpassword">
                         </div>
                         <div class="form-group" v-if="is_register">
@@ -32,10 +58,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="register" v-if="!is_register">Sign up
+                    <button type="button" class="btn btn-light" @click="register" v-if="!is_register" style="background-color: #f8f9fa;">Sign up
                     </button>
-                    <button type="button" class="btn btn-secondary" @click="verify_otp" v-if="is_register"
-                            data-dismiss="modal" aria-label="Close">Verify OTP
+                    <button type="button" class="btn btn-light" @click="verify_otp" v-if="is_register"
+                            data-dismiss="modal" aria-label="Close" style="background-color: #f8f9fa;">Verify OTP
                     </button>
                 </div>
             </div>
@@ -47,7 +73,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Sign up</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -58,21 +84,15 @@
                             <label for="phone">Phone Number</label>
                             <input type="phone" class="form-control" id="phone"
                                    aria-describedby="emailHelp" v-model="phone">
-                            <small id="phone" class="form-text text-muted">We'll never share your details with anyone
-                                else.</small>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" v-model="password">
                         </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="signin" aria-label="Close">Sign In</button>
+                    <button type="button" class="btn btn-light" @click="signin" aria-label="Close" style="background-color: #f8f9fa;">Sign In</button>
                 </div>
             </div>
         </div>
