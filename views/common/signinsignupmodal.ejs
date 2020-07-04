@@ -34,7 +34,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="register" v-if="!is_register">Sign up
                     </button>
-                    <button type="button" class="btn btn-secondary" @click="verify_otp" v-if="is_register" data-dismiss="modal" aria-label="Close">Verify OTP
+                    <button type="button" class="btn btn-secondary" @click="verify_otp" v-if="is_register"
+                            data-dismiss="modal" aria-label="Close">Verify OTP
                     </button>
                 </div>
             </div>
@@ -56,13 +57,13 @@
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
                             <input type="phone" class="form-control" id="phone"
-                                   aria-describedby="emailHelp">
+                                   aria-describedby="emailHelp" v-model="phone">
                             <small id="phone" class="form-text text-muted">We'll never share your details with anyone
                                 else.</small>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="password">
                         </div>
                         <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -119,41 +120,50 @@
                             otp: signup_signin_app.otp
                         })
                     }).then(result => result.json()).then(result => {
-                        // console.log(result);
                         if (res.type === "success") {
                             localStorage.setItem("auth_token", res.auth_token);
-                            alert("success");
+                            $("#signup_modal").hide();
+                            $('.modal-backdrop').remove();
+                            alertify.success("signup successful");
+                            navbarApp.get_user();
+                        } else {
+                            alertify.error("OTP is not correct!");
                         }
                     }).catch(error => console.error(error));
                 } else {
-                    alert("Invalid Phone Number on password!");
+                    alertify.error("Invalid Phone Number on password!");
                 }
             },
             signin: () => {
-      if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0) {
-        fetch('https://auth.grow90.org/phone/signin', {
-            method: "post",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              phone: signup_signin_app.phone,
-              password: signup_signin_app.password
-            })
-          })
-          .then(res => res.json())
-          .then(res => {
-            if (res.type === "success") {
-              localStorage.setItem("auth_token", res.auth_token);
-              alert("signin successful");
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0) {
+                    fetch('https://auth.grow90.org/phone/signin', {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            password: signup_signin_app.password
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.type === "success") {
+                                localStorage.setItem("auth_token", res.auth_token);
+                                $("#signin_modal").hide();
+                                $('.modal-backdrop').remove();
+                                alertify.success("signin successful");
+                                navbarApp.get_user();
+                            } else {
+                                alertify.error("Phone Number or password not found!");
+                            }
+                        })
+                        .catch(err => console.log(err));
+                } else {
+                    alertify.error("Invalid Phone Number or password!");
+                }
             }
-          })
-          .catch(err => console.log(err));
-      } else {
-        alert("Invalid Phone Number on password!");
-      }
-    }
-  }
+        }
 
     });
 </script>

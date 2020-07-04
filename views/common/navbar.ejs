@@ -6,15 +6,17 @@
     .navbar-light .navbar-brand {
         color: white;
     }
+
     #logo_text:hover {
         color: white;
     }
-  .nav_icon {
+
+    .nav_icon {
         color: white;
         height: 100%;
     }
 </style>
-<% include signinsignupmodal.ejs%>
+<% include signinsignupmodal.ejs %>
 <nav class="navbar navbar-expand-lg navbar-light" id="my_navbar">
 
     <a class="navbar-brand" href="/">
@@ -40,11 +42,17 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto" style="cursor: pointer;">
 
-            <li class="nav-item">
-                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signin_modal"><i class="fa fa-sign-in" aria-hidden="true" ></i> Sign in</a>
+            <li class="nav-item" v-if="!is_signed_in">
+                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signin_modal"><i
+                            class="fa fa-sign-in" aria-hidden="true"></i> Sign in</a>
             </li>
-            <li class="nav-item">
-                <a style="color:white;" class="nav-link"  data-toggle="modal" data-target="#signup_modal"><i class="fa fa-sign-in nav_icon" aria-hidden="true" ></i> Sign up</a>
+            <li class="nav-item" v-if="!is_signed_in">
+                <a style="color:white;" class="nav-link" data-toggle="modal" data-target="#signup_modal"><i
+                            class="fa fa-sign-in nav_icon" aria-hidden="true"></i> Sign up</a>
+            </li>
+            <li class="nav-item" v-if="is_signed_in">
+                <a style="color:white;" class="nav-link" onclick="logout()"><i
+                            class="fa fa-sign-out nav_icon" aria-hidden="true"></i> Log out</a>
             </li>
         </ul>
     </div>
@@ -55,6 +63,7 @@
         el: "#my_navbar",
         data: {
             search_text: "",
+            is_signed_in: false
             // links: [
             //     {
             //         name: "Home",
@@ -63,10 +72,25 @@
             // ]
         },
         methods: {
+            get_user: () => {
+                if (localStorage.getItem('auth_token') !== null) {
+                    navbarApp.is_signed_in = true;
+                }
+            },
             get_course: (name) => {
                 home_app.get_data(name)
             }
+        },
+        mounted: function () {
+            this.$nextTick(function () {
+                navbarApp.get_user();
+            })
         }
     })
+
+    function logout() {
+        localStorage.clear();
+        navbarApp.is_signed_in = false;
+    }
 
 </script>
