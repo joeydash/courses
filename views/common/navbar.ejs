@@ -88,10 +88,17 @@
         }
     })
 
-    function logout() {
-        alertify.success("Logged Out successfully!")
-        localStorage.clear();
-        navbarApp.is_signed_in = false;
+        function logout() {
+          alertify.confirm("Confirm Logout.",
+         function(){
+            alertify.success("Logged Out successfully!")
+            localStorage.clear();
+            navbarApp.is_signed_in = false;
+          },
+        function(){
+           alertify.error('Cancel');
+              });
+
     }
 
 </script>

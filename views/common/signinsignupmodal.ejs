@@ -1,11 +1,11 @@
 <div id="signinsignupapp">
     <!-- Modal -->
-    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="signup_modal"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Sign up</h5>
+                    <h5 class="modal-title" id="signup_modal">Sign up</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -22,12 +22,12 @@
                             <input type="password" class="form-control" id="password" v-model="password">
                         </div>
                         <div class="form-group" v-if="!is_register">
-                            <label for="rpassword">Retype Password</label>
-                            <input type="password" class="form-control" id="rpassword" v-model="rpassword">
+                            <label for="rpassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="rpassword" v-model="rpassword"  @keyup.enter="register" v-if="!is_register">
                         </div>
                         <div class="form-group" v-if="is_register">
-                            <label for="exampleInputPassword1">OTP</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" v-model="otp">
+                            <label for="signin_modal_otp">OTP</label>
+                            <input type="text" class="form-control" id="signin_modal_otp" v-model="otp">
                         </div>
                     </div>
                 </div>
@@ -42,12 +42,12 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="signin_modal"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Sign up</h5>
+                    <h5 class="modal-title" id="signin_modal">Sign In</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -56,18 +56,11 @@
                     <div>
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="phone" class="form-control" id="phone"
-                                   aria-describedby="emailHelp" v-model="phone">
-                            <small id="phone" class="form-text text-muted">We'll never share your details with anyone
-                                else.</small>
+                            <input type="phone" class="form-control" id="phone"aria-describedby="emailHelp" v-model="phone">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" v-model="password">
-                        </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                            <input type="password" class="form-control" id="password" v-model="password"  @keyup.enter="signin" aria-label="Close">
                         </div>
                     </div>
                 </div>
@@ -107,7 +100,7 @@
                         }
                     }).catch(error => console.error(error));
                 } else {
-                    alert("Invalid Phone Number on password!");
+                      alertify.success("Invalid Phone Number on password!");
                 }
             },
             verify_otp: () => {
