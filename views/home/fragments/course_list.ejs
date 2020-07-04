@@ -1,34 +1,37 @@
 <style>
+
+    .btn{
+      background-color: rgb(74, 77, 79);
+    }
+
     #cds {
         margin-top: 50px;
     }
 
+    .card {
+        margin: 1.5rem;
+    }
+
     .card-body {
         text-align: center;
-        padding: 0.5rem;
-        /*font-family: 'Pacifico', cursive;*/
+        padding: 1.5rem;
     }
 
     .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
-    .shift{
 
-      margin-bottom: 25px;
-      padding-left: 20px;
+    .course-name {
+        font-weight: bolder;
     }
-    .btn{
-      background-color: rgb(74, 77, 79);
-    }
-    .row{
-      padding-bottom:100px;
-    }
+
+
 </style>
 
 <div class="container">
     <section id="cds">
         <div class="row">
-            <div class="side col-lg-4" style="padding: 1px;cursor: pointer;" v-for="item in course_list"
+            <div class="side col-lg-4 d-flex align-items-stretch" style="padding: 1px;cursor: pointer;" v-for="item in course_list"
                  @click="goTo(item.id)">
 
                 <div class="card">
@@ -36,7 +39,7 @@
                          :src="item.image_url"
                          alt="Card image cap">
                     <div class="card-body">
-                        <h4>{{item.name}}</h4>
+                        <h4 class="course-name">{{item.name}}</h4>
                         <span class="card-title">{{item.details.substring(0, 50)}} ....</span>
                         <!--                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
                         <!--                        card's content.</p>-->

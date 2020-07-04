@@ -1,3 +1,5 @@
+
+
 <style>
 
     @import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
@@ -7,7 +9,7 @@
         text-indent: 1.5rem;
     }
 
-    .form-inline > i {
+    .search-icon {
         position: absolute;
         padding: 7px;
         padding-bottom: 10px;
@@ -52,7 +54,7 @@
             <div class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search Courses" aria-label="Search"
                        v-model="search_text" @keyup="get_course(search_text)" />
-                <i class="fa fa-search" aria-hidden="true"></i>
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
             </div>
         </ul>
     </div>
@@ -77,12 +79,6 @@
         data: {
             search_text: "",
             is_signed_in: false
-            // links: [
-            //     {
-            //         name: "Home",
-            //         href: "/home"
-            //     }
-            // ]
         },
         methods: {
             get_user: () => {
