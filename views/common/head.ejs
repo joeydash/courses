@@ -4,7 +4,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Permanent+Marker&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Play&family=Source+Code+Pro:ital,wght@1,200;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Play&family=Source+Code+Pro:ital,wght@1,200;1,500&display=swap"
+      rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
@@ -45,6 +46,39 @@
                 if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
             });
         return result;
+    }
+
+    let app_id = "37b2c638-5135-429b-bee2-cb615a876fe0";
+    let auth_url = "https://auth.grow90.org/";
+    let auth_db_url = "https://db.grow90.org/v1/graphql";
+    let db_url = "https://lmsdb.herokuapp.com/v1/graphql";
+    fetchMyDB = (query, variables) => {
+        return new Promise((resolve, reject) => {
+            fetch(db_url, {
+                method: "post",
+                headers: {
+                    "app_id": app_id,
+                    "content-type": "application/json",
+                    "Authorization": "Bearer "+localStorage.getItem('auth_token')
+                },
+                body: JSON.stringify({query: query, variables: variables})
+            }).then(result => resolve(result.json()))
+                .catch(error => reject(error));
+        })
+    }
+    fetchMyAuthDB = (query, variables) => {
+        return new Promise((resolve, reject) => {
+            fetch(auth_db_url, {
+                method: "post",
+                headers: {
+                    "app_id": app_id,
+                    "content-type": "application/json",
+                    "Authorization": "Bearer "+localStorage.getItem('auth_token')
+                },
+                body: JSON.stringify({query: query, variables: variables})
+            }).then(result => resolve(result.json()))
+                .catch(error => reject(error));
+        })
     }
 </script>
 

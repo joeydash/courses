@@ -75,6 +75,11 @@
             get_user: () => {
                 if (localStorage.getItem('auth_token') !== null) {
                     navbarApp.is_signed_in = true;
+                    fetchMyAuthDB(`query MyQuery {
+                                  auth {
+                                    id
+                                  }
+                                }`, {}).then(res => console.log(JSON.stringify(res)))
                 }
             },
             get_course: (name) => {
@@ -88,16 +93,16 @@
         }
     })
 
-        function logout() {
-          alertify.confirm("Confirm Logout.",
-         function(){
-            alertify.success("Logged Out successfully!")
-            localStorage.clear();
-            navbarApp.is_signed_in = false;
-          },
-        function(){
-           alertify.error('Cancel');
-              });
+    function logout() {
+        alertify.confirm("Confirm Logout.",
+            function () {
+                alertify.success("Logged Out successfully!")
+                localStorage.clear();
+                navbarApp.is_signed_in = false;
+            },
+            function () {
+                alertify.error('Cancel');
+            });
 
     }
 

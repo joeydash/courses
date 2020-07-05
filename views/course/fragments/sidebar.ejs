@@ -46,6 +46,8 @@
   <div class="col-lg-3 col-md-5" id="sidebar">
     <div class="sidebar-header">
       <h3>{{course_name}}</h3>
+      <button type="button" class="btn btn-primary add" @click="add_course_heading">Add Topics</button>
+
     </div>
     <ul class="list-unstyled components">
       <li v-for="item in course_data_list" @click="()=>{showcase = item.body; showcase_title = item.title}" class="topic">
@@ -54,7 +56,6 @@
         </a>
       </li>
     </ul>
-    <button type="button" class="btn btn-outline-primary add" @click="add_course_heading">Add More course</button>
   </div>
   <div class="col-lg-8 col-md-7" class="wrapper d-flex align-items-stretch">
     <div id="content" class="p-4 p-md-5 pt-5 container">
