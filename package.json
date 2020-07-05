@@ -22,6 +22,5 @@
     "bcrypt": "^5.0.0",
     "nodemon": "^2.0.4"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
