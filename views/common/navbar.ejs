@@ -2,8 +2,7 @@
 
 <style>
 
-    @import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 
     .form-inline > input {
         text-indent: 1.5rem;
@@ -29,7 +28,10 @@
     }
 
     .navbar-light .navbar-brand {
-        color: white;
+        color: #F4F4F4;
+    }
+    .navbar-light .navbar-brand:hover{
+        color: #FFFFFF;
     }
 
     .nav_icon {
@@ -42,7 +44,7 @@
     <a class="navbar-brand" href="/">
         <img src="https://grow90.org/grow90/icon/icon_white_square.png" width="30" height="30"
              class="d-inline-block align-top" alt="logo" style="border-radius: 50%;">
-        <span id="logo_text" class="header">GROW90</span>
+        <span id="logo_text" class="header" >GROW90</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,11 +53,11 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <div class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2 my-lg-0" @submit.prevent="get_course(search_text)">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search Courses" aria-label="Search"
-                       v-model="search_text" @keyup="get_course(search_text)" />
+                       v-model="search_text" />
                 <i class="fa fa-search search-icon" aria-hidden="true"></i>
-            </div>
+            </form>
         </ul>
     </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
