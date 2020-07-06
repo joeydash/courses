@@ -1,5 +1,3 @@
-
-
 <style>
 
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
@@ -30,7 +28,8 @@
     .navbar-light .navbar-brand {
         color: #F4F4F4;
     }
-    .navbar-light .navbar-brand:hover{
+
+    .navbar-light .navbar-brand:hover {
         color: #FFFFFF;
     }
 
@@ -44,7 +43,7 @@
     <a class="navbar-brand" href="/">
         <img src="https://grow90.org/grow90/icon/icon_white_square.png" width="30" height="30"
              class="d-inline-block align-top" alt="logo" style="border-radius: 50%;">
-        <span id="logo_text" class="header" >GROW90</span>
+        <span id="logo_text" class="header">GROW90</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +54,7 @@
         <ul class="navbar-nav mr-auto">
             <form class="form-inline my-2 my-lg-0" @submit.prevent="get_course(search_text)">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search Courses" aria-label="Search"
-                       v-model="search_text" />
+                       v-model="search_text"/>
                 <i class="fa fa-search search-icon" aria-hidden="true"></i>
             </form>
         </ul>
@@ -90,7 +89,13 @@
                                   auth {
                                     id
                                   }
-                                }`, {}).then(res => console.log(JSON.stringify(res)))
+                                }`, {})
+                        .then(res => {
+                            if (res.data.auth.length > 0) {
+                                localStorage.setItem("user_id", res.data.auth[0].id);
+                            }
+                        })
+                        .catch(err => console.error(err));
                 }
             },
             get_course: (name) => {
