@@ -1,0 +1,188 @@
+
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .close, .close:hover {
+        color: aliceblue;
+    }
+
+    .modal-content {
+        color: aliceblue;
+        font-family: 'Raleway', sans-serif;
+    }
+
+    .modal-content {
+        background-color: #363636;
+    }
+
+</style>
+
+
+<div id="signinsignupapp">
+    <!-- Modal -->
+    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="signup_modal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signup_modal">Sign up</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="form-group" v-if="!is_register">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" aria-describedby="emailHelp"
+                                   v-model="phone">
+                        </div>
+                        <div class="form-group" v-if="!is_register">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="password">
+                        </div>
+                        <div class="form-group" v-if="!is_register">
+                            <label for="rpassword">Confirm Password</label>
+                            <input type="password" class="form-control" id="rpassword" v-model="rpassword"  @keyup.enter="register" v-if="!is_register">
+                        </div>
+                        <div class="form-group" v-if="is_register">
+                            <label for="signin_modal_otp">OTP</label>
+                            <input type="text" class="form-control" id="signin_modal_otp" v-model="otp">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="register" v-if="!is_register">Sign up
+                    </button>
+                    <button type="button" class="btn btn-secondary" @click="verify_otp" v-if="is_register"
+                            data-dismiss="modal" aria-label="Close">Verify OTP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="signin_modal" tabindex="-1" role="dialog" aria-labelledby="signin_modal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signin_modal">Sign In</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="phone" class="form-control" id="phone"aria-describedby="emailHelp" v-model="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" v-model="password"  @keyup.enter="signin" aria-label="Close">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" @click="signin" aria-label="Close" style="background-color: #f8f9fa;">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let signup_signin_app = new Vue({
+        el: "#signinsignupapp",
+        data: {
+            phone: "",
+            password: "",
+            rpassword: "",
+            otp: "",
+            is_register: false
+        },
+        methods: {
+            register: () => {
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0 && signup_signin_app.password === signup_signin_app.rpassword) {
+                    fetch('https://auth.grow90.org/phone/register', {
+                        method: "post",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            password: signup_signin_app.password
+                        })
+                    }).then(result => result.json()).then(result => {
+                        // console.log(result);
+                        if (result.type === "success") {
+                            signup_signin_app.is_register = true;
+
+                        }
+                    }).catch(error => console.error(error));
+                } else {
+                      alertify.success("Invalid Phone Number on password!");
+                }
+            },
+            verify_otp: () => {
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.otp.length !== 0) {
+                    fetch('https://auth.grow90.org/phone/verify_otp', {
+                        method: "post",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            otp: signup_signin_app.otp
+                        })
+                    }).then(result => result.json()).then(result => {
+                        if (res.type === "success") {
+                            localStorage.setItem("auth_token", res.auth_token);
+                            $("#signup_modal").hide();
+                            $('.modal-backdrop').remove();
+                            alertify.success("signup successful");
+                            navbarApp.get_user();
+                        } else {
+                            alertify.error("OTP is not correct!");
+                        }
+                    }).catch(error => console.error(error));
+                } else {
+                    alertify.error("Invalid Phone Number on password!");
+                }
+            },
+            signin: () => {
+                if (signup_signin_app.phone.length !== 0 && signup_signin_app.phone.match(/\d/g).length === 10 && signup_signin_app.password.length !== 0) {
+                    fetch('https://auth.grow90.org/phone/signin', {
+                        method: "post",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            phone: signup_signin_app.phone,
+                            password: signup_signin_app.password
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.type === "success") {
+                                localStorage.setItem("auth_token", res.auth_token);
+                                $("#signin_modal").hide();
+                                $('.modal-backdrop').remove();
+                                alertify.success("signin successful");
+                                navbarApp.get_user();
+                            } else {
+                                alertify.error("Phone Number or password not found!");
+                            }
+                        })
+                        .catch(err => console.log(err));
+                } else {
+                    alertify.error("Invalid Phone Number or password!");
+                }
+            }
+        }
+
+    });
+</script>
