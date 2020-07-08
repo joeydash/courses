@@ -27,7 +27,6 @@
         font-weight: bolder;
     }
 
-
 </style>
 
 
@@ -65,13 +64,11 @@
             </div>
             </section><!-- End About Us Section -->
 
-            <div class="side col-lg-4 d-flex align-items-stretch" style="padding: 1px;cursor: pointer;" v-for="item in course_list"
-                 @click="goTo(item.id)">
+            <div class="side col-lg-4 d-flex align-items-stretch" style="padding: 1px;cursor: pointer;"
+                 v-for="item in course_list" @click="goTo(item.id)">
 
-                <div class="card">
-                    <img class="card-img-top"
-                         :src="item.image_url"
-                         alt="Card image cap">
+                <div class="card icon-box">
+                    <img class="card-img-top" :src="item.image_url" alt="Card image cap">
                     <div class="card-body">
                         <h4 class="course-name">{{item.name}}</h4>
                         <span class="card-title">{{item.details.substring(0, 50)}} ....</span>
@@ -282,6 +279,7 @@
 
         </div>
     </section>
+
     <script>
         let home_app = new Vue({
             el: "#cds",
@@ -291,32 +289,6 @@
                 repos: [],
                 course_list: []
             },
-            // methods: {
-            //     get_data: () => {
-            //         fetch('https://api.github.com/users/'+home_app.name+'/repos')
-            //             .then(response => {
-            //                 return response.json()
-            //             })
-            //             .then(data => {
-            //                 home_app.repos = data;
-            //                 console.log(data);
-            //             })
-            //             .catch(err => {
-            //                 console.log(err);
-            //             });
-            //     },
-            //     doItInside: function () {
-
-            //     },
-            //     doItShort: () => {
-            //         home_app.name = "vahu";
-            //         home_app.isGreat = false;
-            //     }
-            // }, mounted: function () {
-            //     name: "",
-            //     repos: [],
-            //     course_list: []
-            // },
             methods: {
                 get_data: (name = "") => {
                     fetch('https://lmsdb.herokuapp.com/v1/graphql', {

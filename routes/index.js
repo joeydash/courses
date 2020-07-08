@@ -31,6 +31,11 @@ router.get('/joey', function (req, res, next) {
 router.get('/', function (req, res, next) {
     res.render('homev2/index');
 });
+
+router.get("/old", function(req, res, next) {
+    res.render('home/index');
+});
+
 router.get('/course', function (req, res, next) {
     res.render('course/index');
 });

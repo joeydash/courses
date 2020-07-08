@@ -1,0 +1,146 @@
+
+
+<style>
+
+    .btn{
+      background-color: rgb(74, 77, 79);
+    }
+
+    #cds {
+        margin-top: 50px;
+    }
+
+    .card {
+        margin: 1.5rem;
+    }
+
+    .card-body {
+        text-align: left;
+        font-size: medium;
+        margin: 0.2rem;
+    }
+
+    /* .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    } */
+
+    .course-name {
+        font-weight: bolder;
+    }
+
+
+</style>
+
+
+
+
+<!-- ======= Courses Section ======= -->
+    <section id="services" class="services section-bg">
+        <div class="container" data-aos="fade-up">
+
+            <div class="section-title">
+                <h2>Courses</h2>
+                <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+            </div>
+
+            <section id="cds">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in"
+                         data-aos-delay="100" v-for="item in course_list" @click="goTo(item.id)">
+                        <div class="card icon-box">
+                            <img class="card-img-top" :src="item.image_url" alt="Card image cap">
+                            <div class="card-body icon">
+                                <h4 class="course-name">{{item.name}}</h4>
+                                <!-- <span class="card-title">{{item.details.substring(0, 50)}} ...</span> -->
+                                <span class="card-title">{{item.details}}</span>
+                            </div>
+                        </div>
+                    </div>                
+                </div>
+            </section>
+
+            <!-- <div class="row">
+                <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bx bxl-dribbble"></i></div>
+                        <h4><a href="">Lorem Ipsum</a></h4>
+                        <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bx bx-file"></i></div>
+                        <h4><a href="">Sed ut perspici</a></h4>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bx bx-tachometer"></i></div>
+                        <h4><a href="">Magni Dolores</a></h4>
+                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bx bx-layer"></i></div>
+                        <h4><a href="">Nemo Enim</a></h4>
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+                    </div>
+                </div> -->
+
+            </div>
+
+        </div>
+    </section><!-- End Courses Section -->
+
+
+
+    <script>
+        let home_app = new Vue({
+            el: "#cds",
+            data: {
+                isGreat: true,
+                name: "Explore Our Courses",
+                repos: [],
+                course_list: []
+            },
+            methods: {
+                get_data: (name = "") => {
+                    fetch('https://lmsdb.herokuapp.com/v1/graphql', {
+                        method: "post",
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            query: `query MyQuery($name: String = "") {
+                                      courses(where: {name: {_ilike: $name}}) {
+                                        name
+                                        image_url
+                                        details
+                                        id
+                                      }
+                                    }`,
+                            variables: {
+                                "name": "%" + name + "%"
+                            }
+                        })
+                    }).then(result => result.json()).then(result => {
+                        console.log(JSON.stringify(result));
+                        home_app.course_list = result.data.courses;
+                    }).catch(err => console.error(err));
+                },
+                goTo: function (item_id) {
+                    location.href = "/course?course_id=" + item_id;
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    home_app.get_data();
+                })
+            }
+        })
+    </script>
