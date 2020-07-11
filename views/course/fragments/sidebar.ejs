@@ -61,7 +61,7 @@
         right: 0; */
         margin-top: 0.7rem;
         float: right;
-        vertical-align:top;
+        vertical-align: top;
     }
 
     .user_body {
@@ -79,9 +79,10 @@
 
         </div>
         <ul class="list-unstyled components">
-            <li v-for="item in course_data_list" @click="()=>{showcase = item;}"
+            <li v-for="item in course_data_list"
                 class="topic" :class="{active_topic: item.id===showcase.id}">
-                <a class="link" style="cursor: pointer;">
+                <a class="link" style="cursor: pointer;"
+                   :href="'/course?course_id='+course_id+'&topic_id='+item.id">
                     {{item.title}}
                 </a>
             </li>
@@ -95,8 +96,8 @@
             <button type="button" class="btn btn-info" @click="next">Next</button>
         </div>
         <div class="col col-sm-12">
-        
-    </div>
+
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -162,7 +163,7 @@
                     }
                 }).catch(err => console.error(err));
             },
-            get_data: (course_id = "") => {
+            get_data: (course_id = "", topic_id = 0) => {
                 courseApp.course_id = course_id;
                 fetch('https://lmsdb.herokuapp.com/v1/graphql', {
                     method: "post",
@@ -189,6 +190,14 @@
                     // console.log(JSON.stringify(result));
                     courseApp.course_name = result.data.courses[0].name;
                     courseApp.course_data_list = result.data.courses[0].course_data;
+                    if (isNaN(topic_id)) {
+                        console.log(_.findIndex(result.data.courses[0].course_data, {'id': topic_id}))
+                        courseApp.showcase = result.data.courses[0].course_data[_.findIndex(result.data.courses[0].course_data, {'id': topic_id})];
+                        courseApp.mount_editor();
+                    } else {
+                        courseApp.showcase = result.data.courses[0].course_data[topic_id]
+                        courseApp.mount_editor();
+                    }
                 }).catch(err => console.error(err));
             },
             mount_editor: () => {
@@ -248,9 +257,7 @@
                         },
                     },
                     // initialBlock: 'paragraph',
-                    data: {
-                        blocks: []
-                    },
+                    data: JSON.parse(courseApp.showcase.body),
                     onReady: function () {
                         // saveButton.click();
                     },
@@ -270,8 +277,7 @@
         },
         mounted: function () {
             this.$nextTick(function () {
-                courseApp.get_data(findGetParameter('course_id'));
-                courseApp.mount_editor();
+                courseApp.get_data(findGetParameter('course_id') === null ? "" : findGetParameter('course_id'), findGetParameter('topic_id') === null ? 0 : findGetParameter('topic_id'));
             })
         }
     });
