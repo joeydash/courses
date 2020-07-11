@@ -5,17 +5,8 @@
         }
     }
 
-    .add {
-        align-items: center;
-    }
-
-    .active_topic {
-        color: #F4F4F4;
-        background-color: rgb(28, 49, 74);
-    }
-
     .btn-outline-primary:hover {
-        background-color: rgb(28, 49, 74) !important;
+        background: #0a0a23 !important;
     }
 
     .chn {
@@ -28,32 +19,33 @@
     }
 
     .list-unstyled:hover {
-        color: rgb(28, 49, 74);
+        color: #d0d0d5;
+    }
+
+    .link:hover {
+        color: #f5f2f0;
+        text-decoration: none;
     }
 
     .mb-4 {
         color: #696969;
     }
 
-    .topic {
-        padding: 10px;
+    .next {
+        float: right;
     }
 
-    .topic:hover {
-        cursor: pointer;
-        color: #f5f2f0;
-        font-weight: bolder;
-        background: rgb(28, 49, 74);
-        /* background: #383e56; */
-        padding: 10px;
+    .root {
+        margin-top: 50px;
     }
 
     .sidebar-header {
         color: #f5f2f0;
-        background: rgb(28, 49, 74);
+        background: #0a0a23;
         /* background: #383e56; */
-        padding: 10px;
         margin-bottom: 0.25rem;
+        margin-top: 0.685rem;
+        padding: 10px;
     }
 
     .save_content {
@@ -64,6 +56,30 @@
         vertical-align: top;
     }
 
+    .topic {
+        padding: 10px;
+        background-color: #d0d0d5;
+        border-top: 2px solid black;
+        border-right: 2px solid black;
+    }
+
+    .topic:active {
+        color: #F4F4F4;
+        background: #0a0a23;
+    }
+
+    .topic:last-child {
+        border-bottom: 2px solid black;
+    }
+
+    .topic:hover {
+        background: #0a0a23;
+        cursor: pointer;
+        color: #f5f2f0;
+        font-weight: bolder;
+        padding: 10px;
+    }
+
     .user_body {
         background-color: #f5f2f0;
         margin-bottom: 1.35rem;
@@ -71,11 +87,12 @@
 
 
 </style>
-<div class="wrapper row" id="courseApp">
+
+<div class="wrapper row root" id="courseApp">
     <div class="col-lg-3 col-md-5" id="sidebar">
         <div class="sidebar-header">
             <h3>{{course_name}}</h3>
-            <button type="button" class="btn btn-primary add" @click="add_course_heading">Add Topics</button>
+            <button type="button" class="btn btn-primary add-topic" @click="add_course_heading">Add Topics</button>
 
         </div>
         <ul class="list-unstyled components">
@@ -93,7 +110,8 @@
             <h1 class="mb-4 heading" v-if="showcase">{{showcase.title}}</h1>
             <button type="button" class="btn btn-success save_content" @click="save_data">Save Body</button>
             <div id="editorjs" class="user_body"></div>
-            <button type="button" class="btn btn-info" @click="next">Next</button>
+            <button type="button" class="btn btn-info Previous" @click="Previous">Previous</button>
+            <button type="button" class="btn btn-info next" @click="next">Next</button>
         </div>
         <div class="col col-sm-12">
 
